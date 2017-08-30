@@ -21,6 +21,9 @@ namespace Otoin {
             RetrieveSettings();
             InitializeComponent();
 
+            this.Icon = Properties.Resources.icon;
+            notifyIcon.Icon = Properties.Resources.icon;
+
             if (programPaths.Count > 0) {
                 if (ValidateProgramPaths()) {
                     Log("Seçtiğiniz programların konumu başarılı bir şekilde doğrulandı :)", "success", false);
@@ -57,7 +60,6 @@ namespace Otoin {
             service.Interval = 5000; // 30 saniyede bir kontrol etsin
 
             processes = new List<Process>();
-
         }
 
         private void filePromptButton_Click(object sender, EventArgs e) {
@@ -118,7 +120,6 @@ namespace Otoin {
             EnableButton(actionButton); //kapalı olan butonları aktifleştirelim
             EnableButton(testButton);
             SaveSettings();
-            
         }
         
         private void programsList_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e) {
@@ -144,7 +145,6 @@ namespace Otoin {
                 SaveSettings();
                 TestService();
             }
-
         }
 
         private void hideButton_Click(object sender, EventArgs e) {
@@ -161,7 +161,6 @@ namespace Otoin {
                 StopService();
                 return;
             }
-
 
             if (isTested) {
                 StartService();
@@ -235,7 +234,6 @@ namespace Otoin {
                 }
                 //selectedProgramPath = Properties.Settings.Default.targetAppLocs;
             }
-
         }
 
         private void SaveSettings() {
@@ -270,7 +268,6 @@ namespace Otoin {
             actionButton.BackColor = Color.FromArgb(255, 168, 35, 35);
             EnableButton(hideButton);
             Log("Servis başarılı bir şekilde başlatıldı.", "success", true);
-
         }
 
         private void StopService() {
@@ -297,9 +294,6 @@ namespace Otoin {
             service.Interval = 5000; //işe yarar bir şey yapıyormuş gibi kontrol hızını arttıralım
             service.Start(); // kontrolü baslatalım başlatalım
             Log("Test başarılı bir şekilde başlatıldı.", "success", true);
-
-            
-
         }
 
         private bool ValidateTimeInputs() {
@@ -337,7 +331,6 @@ namespace Otoin {
 
             isHourChanged = false; // değişim onaylandı, bir sonraki değişimi yakalamak için eski haline döndürelim
             return true;
-
         }
 
         private bool ValidateProgramPaths() {
@@ -400,10 +393,10 @@ namespace Otoin {
                         }
 
                         //shutdown computer logic here
-                        /* var shutDown = new ProcessStartInfo("shutdown", "/s /t 0"); // "shutdown", "/s /f /t 0" -> zorla kapatma
+                        var shutDown = new ProcessStartInfo("shutdown", "/s /t 0"); // "shutdown", "/s /f /t 0" -> zorla kapatma
                         shutDown.CreateNoWindow = true;
                         shutDown.UseShellExecute = false;
-                        Process.Start(shutDown); */
+                        Process.Start(shutDown);
                     }
                     catch (Exception ex) {
                         Log(ex.Message, "error", true);
@@ -417,8 +410,6 @@ namespace Otoin {
                 // TODO: check network activity here!!!
 
             }
-
         }
-
     }
 }
