@@ -12,10 +12,11 @@ namespace Otoin {
 
         List<string> programPaths;
         List<Process> processes;
-        bool isTested, isTestMode, isFirstRun, isProcStarted, isServiceStarted, isHourChanged;
+        bool isTested, isFirstRun , isTestMode, isProcStarted, isServiceStarted, isHourChanged, isManualDelete;
         DateTime startTime, stopTime;
         Timer service;
         int checkCount;
+        string programFiles32, programFiles64;
 
         public Otoin() {
             RetrieveSettings();
@@ -24,17 +25,31 @@ namespace Otoin {
             this.Icon = Properties.Resources.icon;
             notifyIcon.Icon = Properties.Resources.icon;
 
+            programFiles64 = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
+            programFiles32 = Environment.ExpandEnvironmentVariables("%ProgramFiles(x86)%");
+
             if (programPaths.Count > 0) {
-                if (ValidateProgramPaths()) {
+                bool valid = true;
+                for (int i = 0; i < programPaths.Count; i++) {
+                    if (!File.Exists(programPaths[i])) {
+                        isManualDelete = false; //
+                        programPaths.RemoveAt(i);
+                        valid = false;
+                    }
+                }
+
+                if (valid)
                     Log("Seçtiğiniz programların konumu başarılı bir şekilde doğrulandı :)", "success", false);
+                else
+                    Log("Seçtiğiniz programların konumu doğrularken bir hata oluştu :(", "error", true);
+
+                // doğrulama yaparken programPaths.Count değişmiş olabilir
+                if (valid || programPaths.Count > 0) {
                     foreach (string programPath in programPaths) {
                         programsList.Rows.Add(Path.GetFileName(programPath), programPath);
                     }
                     EnableButton(actionButton);
                     EnableButton(testButton);
-                }
-                else {
-                    Log("Seçtiğiniz programların konumu doğrularken bir hata oluştu :(", "error", true);
                 }
 
             }
@@ -60,6 +75,8 @@ namespace Otoin {
             service.Interval = 5000; // 30 saniyede bir kontrol etsin
 
             processes = new List<Process>();
+            isManualDelete = true;
+            isTestMode = false;
         }
 
         private void filePromptButton_Click(object sender, EventArgs e) {
@@ -82,13 +99,22 @@ namespace Otoin {
         }
 
         private void findProgramsBtn_Click(object sender, EventArgs e) {
-            List<string> defaultProgramPaths = new List<string>();
-            defaultProgramPaths.Add(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\uTorrent\\uTorrent.exe");
-            defaultProgramPaths.Add(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\BitTorrent\\BitTorrent.exe");
-            defaultProgramPaths.Add(Environment.ExpandEnvironmentVariables("%ProgramW6432%") + "\\Vuze\\Azureus.exe");
-            defaultProgramPaths.Add(Environment.ExpandEnvironmentVariables("%ProgramFiles(x86)%") + "\\Vuze\\Azureus.exe");
+            string[] defaultProgramPaths = {
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\uTorrent\\uTorrent.exe",
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\BitTorrent\\BitTorrent.exe",
+                programFiles64 + "\\Vuze\\Azureus.exe",
+                programFiles32 + "\\Vuze\\Azureus.exe",
+                programFiles64 + "\\Transmission\\transmission-qt.exe",
+                programFiles32 + "\\Transmission\\transmission-qt.exe",
+                programFiles64 + "\\Deluge\\deluge.exe",
+                programFiles32 + "\\Deluge\\deluge.exe",
+                programFiles64 + "\\qBittorrent\\qbittorrent.exe",
+                programFiles32 + "\\qBittorrent\\qbittorrent.exe",
+                programFiles64 + "\\Steam\\Steam.exe",
+                programFiles32 + "\\Steam\\Steam.exe",
+            };
             int foundPrograms = 0;
-            for (int i = 0; i < defaultProgramPaths.Count; i++) {
+            for (int i = 0; i < defaultProgramPaths.Length; i++) {
                 if (File.Exists(defaultProgramPaths[i])) {
                     if (!programPaths.Contains(defaultProgramPaths[i])) {
                         foundPrograms++;
@@ -123,7 +149,11 @@ namespace Otoin {
         }
         
         private void programsList_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e) {
-            programPaths.RemoveAt(e.RowIndex); // satır sıralaması listeyle aynı (umarım)
+            if (isManualDelete) {
+                //bu kısım kullanıcı el ile bir program sildiğide çalışır, program içi silmelerde çalışmaz
+                programPaths.RemoveAt(e.RowIndex); // satır sıralaması listeyle aynı (umarım)
+                isManualDelete = true; //eski haline çevirelim
+            }
             if(programPaths.Count == 0) {
                 DisableButton(actionButton);
                 DisableButton(testButton);
@@ -238,14 +268,24 @@ namespace Otoin {
 
         private void SaveSettings() {
             if (programPaths.Count > 0) {
-                if (ValidateProgramPaths()) {
-                    string programPathsString = programPaths[0];
-                    for (int i = 1; i < programPaths.Count; i++) {
-                        programPathsString += ";" + programPaths[i];
+                bool valid = true;
+                string programPathsString = "";
+                for (int i = 0; i < programPaths.Count; i++) {
+                    if (!File.Exists(programPaths[i])) {
+                        isManualDelete = false; //
+                        programPaths.RemoveAt(i);
+                        programsList.Rows.RemoveAt(i--);
+                        valid = false;
+                    } else {
+                        if (programPathsString == "")
+                            programPathsString = programPaths[i];
+                        else
+                            programPathsString += ";" + programPaths[i];
                     }
-                    Properties.Settings.Default.targetAppLocs = programPathsString;
                 }
-                else {
+                Properties.Settings.Default.targetAppLocs = programPathsString;
+
+                if (!valid) {
                     Log("Seçtiğiniz programların konumu doğrularken bir hata oluştu. :(", "error", true);
                 }
             } else {
@@ -334,13 +374,17 @@ namespace Otoin {
         }
 
         private bool ValidateProgramPaths() {
-            foreach(string programPath in programPaths) {
-                if (!File.Exists(programPath)) {
-                    return false;
+            bool valid = true;
+            for(int i = 0; i < programPaths.Count; i++) {
+                if (!File.Exists(programPaths[i])) {
+                    isManualDelete = false; //
+                    programPaths.RemoveAt(i);
+                    programsList.Rows.RemoveAt(i--);
+                    valid = false;
                 }
             }
 
-            return true;
+            return valid;
         }
 
         private void EnableButton(Button targetButton) {
