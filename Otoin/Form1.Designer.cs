@@ -34,13 +34,13 @@
             this.minimizeBtn = new FlatUI.FlatMini();
             this.tabControl = new FlatUI.FlatTabControl();
             this.settingsTab = new System.Windows.Forms.TabPage();
-            this.flatLabel8 = new FlatUI.FlatLabel();
             this.modeSleep = new FlatUI.FlatRadioButton();
             this.modeNormal = new FlatUI.FlatRadioButton();
             this.flatLabel7 = new FlatUI.FlatLabel();
             this.actionButton = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.startTB = new System.Windows.Forms.TextBox();
+            this.helpSettings = new System.Windows.Forms.Button();
             this.testButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.stopTB = new System.Windows.Forms.TextBox();
@@ -48,6 +48,7 @@
             this.startLabel = new FlatUI.FlatLabel();
             this.stopLabel = new FlatUI.FlatLabel();
             this.programsTab = new System.Windows.Forms.TabPage();
+            this.helpPrograms = new System.Windows.Forms.Button();
             this.findProgramsBtn = new System.Windows.Forms.Button();
             this.filePromptButton = new System.Windows.Forms.Button();
             this.programsList = new System.Windows.Forms.DataGridView();
@@ -151,12 +152,12 @@
             // settingsTab
             // 
             this.settingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
-            this.settingsTab.Controls.Add(this.flatLabel8);
             this.settingsTab.Controls.Add(this.modeSleep);
             this.settingsTab.Controls.Add(this.modeNormal);
             this.settingsTab.Controls.Add(this.flatLabel7);
             this.settingsTab.Controls.Add(this.actionButton);
             this.settingsTab.Controls.Add(this.panel2);
+            this.settingsTab.Controls.Add(this.helpSettings);
             this.settingsTab.Controls.Add(this.testButton);
             this.settingsTab.Controls.Add(this.panel1);
             this.settingsTab.Controls.Add(this.hideButton);
@@ -169,20 +170,6 @@
             this.settingsTab.TabIndex = 0;
             this.settingsTab.Text = "Ayarlar";
             // 
-            // flatLabel8
-            // 
-            this.flatLabel8.BackColor = System.Drawing.Color.Transparent;
-            this.flatLabel8.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
-            this.flatLabel8.ForeColor = System.Drawing.Color.White;
-            this.flatLabel8.Location = new System.Drawing.Point(25, 88);
-            this.flatLabel8.Name = "flatLabel8";
-            this.flatLabel8.Size = new System.Drawing.Size(445, 74);
-            this.flatLabel8.TabIndex = 17;
-            this.flatLabel8.Text = "• Uyku modu bilgisayarınızı uyku moduna alır, açılış saatinde uyandırıp seçtiğini" +
-    "z programları çalıştırır.\r\n• Normal modda ise bilgisayarınız açık kalır, açılış " +
-    "saatinde seçtiğiniz programlar çalışır.";
-            this.flatLabel8.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // modeSleep
             // 
             this.modeSleep.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
@@ -191,7 +178,7 @@
             this.modeSleep.Enabled = false;
             this.modeSleep.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Strikeout);
             this.modeSleep.ForeColor = System.Drawing.SystemColors.ControlLight;
-            this.modeSleep.Location = new System.Drawing.Point(209, 10);
+            this.modeSleep.Location = new System.Drawing.Point(215, 37);
             this.modeSleep.Name = "modeSleep";
             this.modeSleep.Options = FlatUI.FlatRadioButton._Options.Style1;
             this.modeSleep.Size = new System.Drawing.Size(65, 22);
@@ -204,7 +191,7 @@
             this.modeNormal.Checked = true;
             this.modeNormal.Cursor = System.Windows.Forms.Cursors.Hand;
             this.modeNormal.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.modeNormal.Location = new System.Drawing.Point(124, 10);
+            this.modeNormal.Location = new System.Drawing.Point(130, 37);
             this.modeNormal.Name = "modeNormal";
             this.modeNormal.Options = FlatUI.FlatRadioButton._Options.Style1;
             this.modeNormal.Size = new System.Drawing.Size(79, 22);
@@ -217,7 +204,7 @@
             this.flatLabel7.BackColor = System.Drawing.Color.Transparent;
             this.flatLabel7.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.flatLabel7.ForeColor = System.Drawing.Color.White;
-            this.flatLabel7.Location = new System.Drawing.Point(24, 12);
+            this.flatLabel7.Location = new System.Drawing.Point(30, 39);
             this.flatLabel7.Name = "flatLabel7";
             this.flatLabel7.Size = new System.Drawing.Size(99, 17);
             this.flatLabel7.TabIndex = 14;
@@ -246,7 +233,7 @@
             this.panel2.Controls.Add(this.startTB);
             this.panel2.ForeColor = System.Drawing.SystemColors.Window;
             this.panel2.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.panel2.Location = new System.Drawing.Point(109, 43);
+            this.panel2.Location = new System.Drawing.Point(114, 95);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(70, 30);
             this.panel2.TabIndex = 13;
@@ -266,6 +253,22 @@
             this.startTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.startTB.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.timeTB_KeyPress);
             // 
+            // helpSettings
+            // 
+            this.helpSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(168)))), ((int)(((byte)(109)))));
+            this.helpSettings.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.helpSettings.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.helpSettings.FlatAppearance.BorderSize = 0;
+            this.helpSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.helpSettings.ForeColor = System.Drawing.Color.White;
+            this.helpSettings.Location = new System.Drawing.Point(27, 176);
+            this.helpSettings.Name = "helpSettings";
+            this.helpSettings.Size = new System.Drawing.Size(106, 32);
+            this.helpSettings.TabIndex = 11;
+            this.helpSettings.Text = "Yardım";
+            this.helpSettings.UseVisualStyleBackColor = false;
+            this.helpSettings.Click += new System.EventHandler(this.helpSettings_Click);
+            // 
             // testButton
             // 
             this.testButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
@@ -275,7 +278,7 @@
             this.testButton.FlatAppearance.BorderSize = 0;
             this.testButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.testButton.ForeColor = System.Drawing.Color.White;
-            this.testButton.Location = new System.Drawing.Point(27, 176);
+            this.testButton.Location = new System.Drawing.Point(139, 176);
             this.testButton.Name = "testButton";
             this.testButton.Size = new System.Drawing.Size(106, 32);
             this.testButton.TabIndex = 11;
@@ -289,7 +292,7 @@
             this.panel1.Controls.Add(this.stopTB);
             this.panel1.ForeColor = System.Drawing.SystemColors.Window;
             this.panel1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.panel1.Location = new System.Drawing.Point(363, 43);
+            this.panel1.Location = new System.Drawing.Point(368, 95);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(70, 30);
             this.panel1.TabIndex = 13;
@@ -318,7 +321,7 @@
             this.hideButton.FlatAppearance.BorderSize = 0;
             this.hideButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.hideButton.ForeColor = System.Drawing.Color.White;
-            this.hideButton.Location = new System.Drawing.Point(191, 176);
+            this.hideButton.Location = new System.Drawing.Point(251, 176);
             this.hideButton.Name = "hideButton";
             this.hideButton.Size = new System.Drawing.Size(106, 32);
             this.hideButton.TabIndex = 11;
@@ -332,7 +335,7 @@
             this.startLabel.BackColor = System.Drawing.Color.Transparent;
             this.startLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.startLabel.ForeColor = System.Drawing.Color.White;
-            this.startLabel.Location = new System.Drawing.Point(24, 48);
+            this.startLabel.Location = new System.Drawing.Point(29, 100);
             this.startLabel.Name = "startLabel";
             this.startLabel.Size = new System.Drawing.Size(79, 19);
             this.startLabel.TabIndex = 5;
@@ -344,7 +347,7 @@
             this.stopLabel.BackColor = System.Drawing.Color.Transparent;
             this.stopLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.stopLabel.ForeColor = System.Drawing.Color.White;
-            this.stopLabel.Location = new System.Drawing.Point(261, 48);
+            this.stopLabel.Location = new System.Drawing.Point(266, 100);
             this.stopLabel.Name = "stopLabel";
             this.stopLabel.Size = new System.Drawing.Size(96, 19);
             this.stopLabel.TabIndex = 5;
@@ -353,6 +356,7 @@
             // programsTab
             // 
             this.programsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
+            this.programsTab.Controls.Add(this.helpPrograms);
             this.programsTab.Controls.Add(this.findProgramsBtn);
             this.programsTab.Controls.Add(this.filePromptButton);
             this.programsTab.Controls.Add(this.programsList);
@@ -363,15 +367,31 @@
             this.programsTab.TabIndex = 1;
             this.programsTab.Text = "Açılacak Programlar";
             // 
+            // helpPrograms
+            // 
+            this.helpPrograms.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(168)))), ((int)(((byte)(109)))));
+            this.helpPrograms.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.helpPrograms.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.helpPrograms.FlatAppearance.BorderSize = 0;
+            this.helpPrograms.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.helpPrograms.ForeColor = System.Drawing.Color.White;
+            this.helpPrograms.Location = new System.Drawing.Point(27, 176);
+            this.helpPrograms.Name = "helpPrograms";
+            this.helpPrograms.Size = new System.Drawing.Size(126, 32);
+            this.helpPrograms.TabIndex = 13;
+            this.helpPrograms.Text = "Yardım";
+            this.helpPrograms.UseVisualStyleBackColor = false;
+            this.helpPrograms.Click += new System.EventHandler(this.helpPrograms_Click);
+            // 
             // findProgramsBtn
             // 
             this.findProgramsBtn.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
             this.findProgramsBtn.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.findProgramsBtn.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.findProgramsBtn.FlatAppearance.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
             this.findProgramsBtn.FlatAppearance.BorderSize = 0;
             this.findProgramsBtn.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.findProgramsBtn.ForeColor = System.Drawing.Color.White;
-            this.findProgramsBtn.Location = new System.Drawing.Point(91, 176);
+            this.findProgramsBtn.Location = new System.Drawing.Point(185, 176);
             this.findProgramsBtn.Name = "findProgramsBtn";
             this.findProgramsBtn.Size = new System.Drawing.Size(126, 32);
             this.findProgramsBtn.TabIndex = 11;
@@ -387,7 +407,7 @@
             this.filePromptButton.FlatAppearance.BorderSize = 0;
             this.filePromptButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.filePromptButton.ForeColor = System.Drawing.Color.White;
-            this.filePromptButton.Location = new System.Drawing.Point(278, 176);
+            this.filePromptButton.Location = new System.Drawing.Point(344, 176);
             this.filePromptButton.Name = "filePromptButton";
             this.filePromptButton.Size = new System.Drawing.Size(126, 32);
             this.filePromptButton.TabIndex = 11;
@@ -846,13 +866,14 @@
         private FlatUI.FlatRadioButton modeSleep;
         private FlatUI.FlatRadioButton modeNormal;
         private FlatUI.FlatLabel flatLabel7;
-        private FlatUI.FlatLabel flatLabel8;
         private System.Windows.Forms.NotifyIcon notifyIcon;
         private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.Panel bgTop;
         private System.Windows.Forms.DataGridViewTextBoxColumn programNameCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn programPathCol;
         private System.Windows.Forms.Button findProgramsBtn;
+        private System.Windows.Forms.Button helpSettings;
+        private System.Windows.Forms.Button helpPrograms;
     }
 }
 

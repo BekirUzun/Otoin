@@ -10,6 +10,7 @@ using System.Windows.Forms;
 namespace Otoin {
     public partial class Otoin : Form {
 
+        HelpForm help;
         List<string> programPaths;
         List<Process> processes;
         bool isTested, isFirstRun , isTestMode, isProcStarted, isServiceStarted, isHourChanged, isManualDelete;
@@ -298,6 +299,26 @@ namespace Otoin {
             Properties.Settings.Default.startTime = startTime;
             Properties.Settings.Default.stopTime = stopTime;
             Properties.Settings.Default.Save();
+        }
+
+        private void helpSettings_Click(object sender, EventArgs e) {
+            if (help == null) {
+                help = new HelpForm();
+                help.Show();
+            }
+            help.SelectTab(0);
+            help.Show();
+            help.Focus();
+        }
+
+        private void helpPrograms_Click(object sender, EventArgs e) {
+            if (help == null) {
+                help = new HelpForm();
+                help.Show();
+            }
+            help.SelectTab(1);
+            help.Show();
+            help.Focus();
         }
 
         private void StartService() {
