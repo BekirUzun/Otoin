@@ -16,7 +16,7 @@ namespace Otoin {
         bool isTested, isFirstRun , isTestMode, isProcStarted, isServiceStarted, isHourChanged, isManualDelete;
         DateTime startTime, stopTime;
         Timer service;
-        int checkCount;
+        int checkCount, stopActionIndex;
         string programFiles32, programFiles64;
 
         public Otoin() {
@@ -70,6 +70,8 @@ namespace Otoin {
             temp_hour = (stopTime.Hour < 10) ? "0" + stopTime.Hour : "" + stopTime.Hour;
             temp_min = (stopTime.Minute < 10) ? "0" + stopTime.Minute : "" + stopTime.Minute;
             stopTB.Text = temp_hour + ":" + temp_min;
+
+            stopAction.SelectedIndex = stopActionIndex;
 
             service = new Timer();
             service.Tick += new EventHandler(Check); //Her 30 saniyede bir Check() çalışsın
@@ -165,7 +167,8 @@ namespace Otoin {
 
         private void testButton_Click(object sender, EventArgs e) {
             var confirmResult = MessageBox.Show("Seçtiğiniz programlar bir dakika sonra açılacak ve bir dakika açık kalacak. " +
-                        "Daha sonra bilgisayar kapatılacak! Kaydetmediğiniz çalışmalar varsa lütfen kaydedin. " +
+                        "Daha sonra seçtiğiniz kapanış eylemi gerçekleştirilecek. "+
+                        "Kaydetmediğiniz çalışmalarınız varsa lütfen kaydedin. " +
                         "\nOnaylıyor musunuz?",
                         "Onayla",
                         MessageBoxButtons.OKCancel);
@@ -256,6 +259,7 @@ namespace Otoin {
             startTime = Properties.Settings.Default.startTime;
             stopTime = Properties.Settings.Default.stopTime;
             isFirstRun = Properties.Settings.Default.isFirstRun;
+            stopActionIndex = Properties.Settings.Default.stopAction;
             if (!isFirstRun) {
                 if(Properties.Settings.Default.targetAppLocs.Length > 0) {
                     string[] tempPaths = Properties.Settings.Default.targetAppLocs.Split(';');
@@ -298,6 +302,7 @@ namespace Otoin {
             Properties.Settings.Default.isFirstRun = isFirstRun;
             Properties.Settings.Default.startTime = startTime;
             Properties.Settings.Default.stopTime = stopTime;
+            Properties.Settings.Default.stopAction = stopActionIndex;
             Properties.Settings.Default.Save();
         }
 
@@ -309,6 +314,10 @@ namespace Otoin {
             help.SelectTab(0);
             help.Show();
             help.Focus();
+        }
+
+        private void stopAction_SelectedIndexChanged(object sender, EventArgs e) {
+            stopActionIndex = stopAction.SelectedIndex;
         }
 
         private void helpPrograms_Click(object sender, EventArgs e) {
@@ -447,21 +456,38 @@ namespace Otoin {
                             processes[i].Kill();
                         }
                         processes.Clear();
-                        Log(checkCount + ". kontrolde " + i + " program sonlandırıldı. Bilgisayar kapatılıyor...", "success", true);
-                        isProcStarted = false;
                         StopService();
-
+                        Log(checkCount + ". kontrolde " + i + " program sonlandırıldı. Kapanış eylemi uygulanıyor...", "success", true);
+                        isProcStarted = false;
+                        
                         if (isTestMode) {
                             isTested = true;
                             Properties.Settings.Default.isTested = true;
                             Properties.Settings.Default.Save();
                         }
 
-                        //shutdown computer logic here
-                        var shutDown = new ProcessStartInfo("shutdown", "/s /t 0"); // "shutdown", "/s /f /t 0" -> zorla kapatma
-                        shutDown.CreateNoWindow = true;
-                        shutDown.UseShellExecute = false;
-                        Process.Start(shutDown);
+                        //kapanış saati geldiğinde ne yapacağımıza bakalım
+                        if (stopActionIndex == 1) {
+                            //bilgisayarı uyut (sleep/suspend)
+                            Application.SetSuspendState(PowerState.Suspend, true, true);
+                        } else if (stopActionIndex == 2) {
+                            //bilgisayarı hazırda beklet (hibernate)
+                            Application.SetSuspendState(PowerState.Hibernate, true, true);
+                        } else if (stopActionIndex == 3) {
+                            //bilgisayarı kapat
+                            var shutDown = new ProcessStartInfo("shutdown", "/s /t 0"); // "shutdown", "/s /f /t 0" -> zorla kapatma
+                            shutDown.CreateNoWindow = true;
+                            shutDown.UseShellExecute = false;
+                            Process.Start(shutDown);
+                        } else if(stopActionIndex ==4) {
+                            //bilgisayarı kapatmaya zorla
+                            var shutDown = new ProcessStartInfo("shutdown", "/s /f /t 0");
+                            shutDown.CreateNoWindow = true;
+                            shutDown.UseShellExecute = false;
+                            Process.Start(shutDown);
+                        }
+                        //selectedIndex == 0 ise hiçbir şey yapmayacağız
+                        
                     }
                     catch (Exception ex) {
                         Log(ex.Message, "error", true);
