@@ -472,6 +472,9 @@ namespace Otoin {
                             isTested = true;
                             Properties.Settings.Default.isTested = true;
                             Properties.Settings.Default.Save();
+                            ValidateTimeInputs();
+                            EnableButton(testButton);
+                            EnableButton(actionButton);
                         }
 
                         //kapanış saati geldiğinde ne yapacağımıza bakalım
