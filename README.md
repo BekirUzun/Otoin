@@ -10,7 +10,7 @@ Otoin ise indirme programlarınızı gece 02:10'da açar sabah 07:50'de kapatır
 - Torrent programlarını otomatik keşfetme
 - İstediğiniz programı ekleyebilme
 - Arkaplanda çalışma
-- Kapanış saatinde bilgisayarı otomatik kapatma
+- Kapanış saatinde bir eylem seçme (bilgisayarı kapat, uykuya al vb.)
 - Güncellemeleri otomatik kontrol etme
 
 ## İndirme Linkleri
