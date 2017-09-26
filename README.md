@@ -16,9 +16,11 @@ Otoin ise indirme programlarınızı gece 02:10'da açar sabah 07:50'de kapatır
 ## İndirme Linkleri
 
 ### Son sürüm
-**v1.0.2** [İndirmek için tıklayın](https://github.com/BekirUzun/Otoin/releases/download/v1.0.2/Otoin-v1.0.2.zip "Otoin-v1.0.2")
+**v1.0.3** [İndirmek için tıklayın](https://github.com/BekirUzun/Otoin/releases/download/v1.0.3/Otoin-v1.0.3.zip "Otoin-v1.0.3")
 
 ### Önceki sürümler
+**v1.0.2** [İndirmek için tıklayın](https://github.com/BekirUzun/Otoin/releases/download/v1.0.2/Otoin-v1.0.2.zip "Otoin-v1.0.2")
+
 **v1.0.1** [İndirmek için tıklayın](https://github.com/BekirUzun/Otoin/releases/download/v1.0.1/Otoin-v1.0.1.zip "Otoin-v1.0.1")
 
 **v1.0.0** [İndirmek için tıklayın](https://github.com/BekirUzun/Otoin/releases/download/v1.0.0/Otoin-v1.0.0.zip "Otoin-v1.0.0")
