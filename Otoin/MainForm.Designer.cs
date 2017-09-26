@@ -24,14 +24,13 @@
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle37 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle38 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle39 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle40 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Otoin));
             this.skin = new FlatUI.FormSkin();
-            this.bgTop = new System.Windows.Forms.Panel();
-            this.minimizeBtn = new FlatUI.FlatMini();
+            this.shadow = new System.Windows.Forms.PictureBox();
             this.tabControl = new FlatUI.FlatTabControl();
             this.settingsTab = new System.Windows.Forms.TabPage();
             this.stopAction = new FlatUI.FlatComboBox();
@@ -75,12 +74,15 @@
             this.aboutBold2 = new FlatUI.FlatLabel();
             this.aboutBold1 = new FlatUI.FlatLabel();
             this.aboutText = new System.Windows.Forms.Label();
+            this.bgTop = new System.Windows.Forms.Panel();
+            this.minimizeBtn = new FlatUI.FlatMini();
             this.message = new FlatUI.FlatAlertBox();
             this.closeBtn = new FlatUI.FlatClose();
             this.panel3 = new System.Windows.Forms.Panel();
             this.programPrompt = new System.Windows.Forms.OpenFileDialog();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.skin.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.shadow)).BeginInit();
             this.tabControl.SuspendLayout();
             this.settingsTab.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -95,9 +97,10 @@
             this.skin.BackColor = System.Drawing.Color.White;
             this.skin.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
             this.skin.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(58)))), ((int)(((byte)(60)))));
+            this.skin.Controls.Add(this.shadow);
+            this.skin.Controls.Add(this.tabControl);
             this.skin.Controls.Add(this.bgTop);
             this.skin.Controls.Add(this.minimizeBtn);
-            this.skin.Controls.Add(this.tabControl);
             this.skin.Controls.Add(this.message);
             this.skin.Controls.Add(this.closeBtn);
             this.skin.Controls.Add(this.panel3);
@@ -113,27 +116,16 @@
             this.skin.Text = "Otoin";
             this.skin.Resize += new System.EventHandler(this.skin_Resize);
             // 
-            // bgTop
+            // shadow
             // 
-            this.bgTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
-            this.bgTop.ForeColor = System.Drawing.Color.White;
-            this.bgTop.Location = new System.Drawing.Point(12, 93);
-            this.bgTop.Name = "bgTop";
-            this.bgTop.Size = new System.Drawing.Size(501, 4);
-            this.bgTop.TabIndex = 17;
-            // 
-            // minimizeBtn
-            // 
-            this.minimizeBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.minimizeBtn.BackColor = System.Drawing.Color.White;
-            this.minimizeBtn.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(168)))), ((int)(((byte)(168)))), ((int)(((byte)(35)))));
-            this.minimizeBtn.Font = new System.Drawing.Font("Marlett", 12F);
-            this.minimizeBtn.Location = new System.Drawing.Point(471, 12);
-            this.minimizeBtn.Name = "minimizeBtn";
-            this.minimizeBtn.Size = new System.Drawing.Size(18, 18);
-            this.minimizeBtn.TabIndex = 15;
-            this.minimizeBtn.Text = "flatMini1";
-            this.minimizeBtn.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(243)))), ((int)(((byte)(243)))));
+            this.shadow.BackColor = System.Drawing.Color.Transparent;
+            this.shadow.InitialImage = global::Otoin.Properties.Resources.shadow;
+            this.shadow.Location = new System.Drawing.Point(0, 0);
+            this.shadow.Name = "shadow";
+            this.shadow.Size = new System.Drawing.Size(525, 375);
+            this.shadow.TabIndex = 18;
+            this.shadow.TabStop = false;
+            this.shadow.Visible = false;
             // 
             // tabControl
             // 
@@ -459,22 +451,22 @@
             this.programsList.AllowUserToAddRows = false;
             this.programsList.AllowUserToResizeColumns = false;
             this.programsList.AllowUserToResizeRows = false;
-            dataGridViewCellStyle37.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
-            dataGridViewCellStyle37.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle37.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle37.SelectionForeColor = System.Drawing.Color.White;
-            this.programsList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle37;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
+            this.programsList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.programsList.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
             this.programsList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.programsList.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle38.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle38.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(63)))));
-            dataGridViewCellStyle38.Font = new System.Drawing.Font("Segoe UI", 10F);
-            dataGridViewCellStyle38.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle38.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle38.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle38.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.programsList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle38;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(63)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 10F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.programsList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.programsList.ColumnHeadersHeight = 30;
             this.programsList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.programNameCol,
@@ -485,20 +477,20 @@
             this.programsList.Location = new System.Drawing.Point(-42, 0);
             this.programsList.Name = "programsList";
             this.programsList.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle39.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle39.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
-            dataGridViewCellStyle39.Font = new System.Drawing.Font("Segoe UI", 10F);
-            dataGridViewCellStyle39.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle39.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle39.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle39.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.programsList.RowHeadersDefaultCellStyle = dataGridViewCellStyle39;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 10F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.programsList.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.programsList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle40.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
-            dataGridViewCellStyle40.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle40.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle40.SelectionForeColor = System.Drawing.Color.White;
-            this.programsList.RowsDefaultCellStyle = dataGridViewCellStyle40;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White;
+            this.programsList.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.programsList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
             this.programsList.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
             this.programsList.RowTemplate.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
@@ -780,6 +772,28 @@
             this.aboutText.TabIndex = 16;
             this.aboutText.Text = resources.GetString("aboutText.Text");
             // 
+            // bgTop
+            // 
+            this.bgTop.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
+            this.bgTop.ForeColor = System.Drawing.Color.White;
+            this.bgTop.Location = new System.Drawing.Point(12, 93);
+            this.bgTop.Name = "bgTop";
+            this.bgTop.Size = new System.Drawing.Size(501, 4);
+            this.bgTop.TabIndex = 17;
+            // 
+            // minimizeBtn
+            // 
+            this.minimizeBtn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.minimizeBtn.BackColor = System.Drawing.Color.White;
+            this.minimizeBtn.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(168)))), ((int)(((byte)(168)))), ((int)(((byte)(35)))));
+            this.minimizeBtn.Font = new System.Drawing.Font("Marlett", 12F);
+            this.minimizeBtn.Location = new System.Drawing.Point(471, 12);
+            this.minimizeBtn.Name = "minimizeBtn";
+            this.minimizeBtn.Size = new System.Drawing.Size(18, 18);
+            this.minimizeBtn.TabIndex = 15;
+            this.minimizeBtn.Text = "flatMini1";
+            this.minimizeBtn.TextColor = System.Drawing.Color.FromArgb(((int)(((byte)(243)))), ((int)(((byte)(243)))), ((int)(((byte)(243)))));
+            // 
             // message
             // 
             this.message.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
@@ -843,6 +857,7 @@
             this.Text = "Otoin";
             this.TransparencyKey = System.Drawing.Color.Fuchsia;
             this.skin.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.shadow)).EndInit();
             this.tabControl.ResumeLayout(false);
             this.settingsTab.ResumeLayout(false);
             this.settingsTab.PerformLayout();
@@ -915,6 +930,7 @@
         private System.Windows.Forms.Button helpPrograms;
         private FlatUI.FlatComboBox stopAction;
         private FlatUI.FlatLabel flatLabel8;
+        private System.Windows.Forms.PictureBox shadow;
     }
 }
 

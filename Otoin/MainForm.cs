@@ -84,6 +84,7 @@ namespace Otoin {
             isTestMode = false;
 
             if (Properties.Settings.Default.updateCheck) {
+                // kullanıcı daha önceden "Asla" butonuna basmadı. Asenkron güncelleme kontrolü yapacağız
                 CheckUpdate();
             }
             
@@ -526,6 +527,10 @@ namespace Otoin {
             int currentVersion = v.Major * 100 + v.Minor * 10 + v.Build;
 
             if (latestVersion > currentVersion) {
+                shadow.Image = Properties.Resources.blur;
+                shadow.BackColor = Color.Transparent;
+                shadow.Visible = true;
+
                 UpdateForm update = new UpdateForm(shadow);
                 update.Show();
                 update.Focus();
