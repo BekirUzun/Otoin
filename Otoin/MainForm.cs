@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-//using System.Threading;
+using System.Threading.Tasks;
+using Octokit;
 
 namespace Otoin {
     public partial class Otoin : Form {
@@ -80,6 +82,11 @@ namespace Otoin {
             processes = new List<Process>();
             isManualDelete = true;
             isTestMode = false;
+
+            if (Properties.Settings.Default.updateCheck) {
+                CheckUpdate();
+            }
+            
         }
 
         private void filePromptButton_Click(object sender, EventArgs e) {
@@ -469,10 +476,10 @@ namespace Otoin {
                         //kapanış saati geldiğinde ne yapacağımıza bakalım
                         if (stopActionIndex == 1) {
                             //bilgisayarı uyut (sleep/suspend)
-                            Application.SetSuspendState(PowerState.Suspend, true, true);
+                            System.Windows.Forms.Application.SetSuspendState(PowerState.Suspend, true, true);
                         } else if (stopActionIndex == 2) {
                             //bilgisayarı hazırda beklet (hibernate)
-                            Application.SetSuspendState(PowerState.Hibernate, true, true);
+                            System.Windows.Forms.Application.SetSuspendState(PowerState.Hibernate, true, true);
                         } else if (stopActionIndex == 3) {
                             //bilgisayarı kapat
                             var shutDown = new ProcessStartInfo("shutdown", "/s /t 0"); // "shutdown", "/s /f /t 0" -> zorla kapatma
@@ -500,6 +507,41 @@ namespace Otoin {
 
                 // TODO: check network activity here!!!
 
+            }
+        }
+
+        private async void CheckUpdate() {
+            await Task.Delay(3000);
+
+            if (!CheckInternetConnection()) {
+                Log("İnternet bağlantınız olmadığından güncelleme kontrol edilemedi :(", "error", true);
+                return;
+            }
+            var github = new GitHubClient(new ProductHeaderValue("Otoin"));
+            var releases = github.Repository.Release.GetAll("BekirUzun", "Otoin");
+            var latestRelease = releases.Result[0];
+            int latestVersion = Int16.Parse(latestRelease.TagName.Remove(4, 1).Remove(2, 1).Remove(0, 1));
+            latestVersion = 102;
+            var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            int currentVersion = v.Major * 100 + v.Minor * 10 + v.Build;
+
+            if (latestVersion > currentVersion) {
+                UpdateForm update = new UpdateForm(shadow);
+                update.Show();
+                update.Focus();
+            }
+        }
+
+        private bool CheckInternetConnection() {
+            try {
+                using (var client = new System.Net.WebClient()) {
+                    using (client.OpenRead("http://clients3.google.com/generate_204")) {
+                        return true;
+                    }
+                }
+            }
+            catch {
+                return false;
             }
         }
     }

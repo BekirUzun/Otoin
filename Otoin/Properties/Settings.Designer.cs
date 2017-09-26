@@ -142,5 +142,17 @@ namespace Otoin.Properties {
                 this["stopAction"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool updateCheck {
+            get {
+                return ((bool)(this["updateCheck"]));
+            }
+            set {
+                this["updateCheck"] = value;
+            }
+        }
     }
 }
