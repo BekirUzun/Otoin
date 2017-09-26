@@ -24,6 +24,7 @@ namespace Otoin {
         private void openButton_Click(object sender, EventArgs e) {
             System.Diagnostics.Process.Start("https://github.com/BekirUzun/Otoin/#%C4%B0ndirme-linkleri");
             CloseForm();
+            Application.Exit();
         }
 
         private void CloseForm() {

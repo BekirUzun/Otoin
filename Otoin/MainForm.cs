@@ -16,6 +16,7 @@ namespace Otoin {
         List<string> programPaths;
         List<Process> processes;
         bool isTested, isFirstRun , isTestMode, isProcStarted, isServiceStarted, isHourChanged, isManualDelete;
+        bool checkUpdates;
         DateTime startTime, stopTime;
         Timer service;
         int checkCount, stopActionIndex;
@@ -83,7 +84,7 @@ namespace Otoin {
             isManualDelete = true;
             isTestMode = false;
 
-            if (Properties.Settings.Default.updateCheck) {
+            if (checkUpdates) {
                 // kullanıcı daha önceden "Asla" butonuna basmadı. Asenkron güncelleme kontrolü yapacağız
                 CheckUpdate();
             }
@@ -268,6 +269,7 @@ namespace Otoin {
             stopTime = Properties.Settings.Default.stopTime;
             isFirstRun = Properties.Settings.Default.isFirstRun;
             stopActionIndex = Properties.Settings.Default.stopAction;
+            checkUpdates = Properties.Settings.Default.updateCheck;
             if (!isFirstRun) {
                 if(Properties.Settings.Default.targetAppLocs.Length > 0) {
                     string[] tempPaths = Properties.Settings.Default.targetAppLocs.Split(';');
@@ -311,6 +313,7 @@ namespace Otoin {
             Properties.Settings.Default.startTime = startTime;
             Properties.Settings.Default.stopTime = stopTime;
             Properties.Settings.Default.stopAction = stopActionIndex;
+            Properties.Settings.Default.updateCheck = checkUpdates;
             Properties.Settings.Default.Save();
         }
 
@@ -525,7 +528,6 @@ namespace Otoin {
             var releases = github.Repository.Release.GetAll("BekirUzun", "Otoin");
             var latestRelease = releases.Result[0];
             int latestVersion = Int16.Parse(latestRelease.TagName.Remove(4, 1).Remove(2, 1).Remove(0, 1));
-            latestVersion = 102;
             var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             int currentVersion = v.Major * 100 + v.Minor * 10 + v.Build;
 
