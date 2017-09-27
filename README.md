@@ -3,7 +3,7 @@
 
 Otoin, 1 Mayıs'da çıkan AKK yasasından en iyi şekilde yararlanmanızı sağlayan bir programdır.
 Bu düzenlemede gece 02:00 - 08:00 arası yapılan indirmeler AKK ye dahil edilmez ve AKK sonrası hız yavaşlamasından etkilenmez.
-Otoin ise indirme programlarınızı gece 02:10'da açar sabah 07:50'de kapatır.
+Otoin ise indirme programlarınızı gece 02:10'da açar sabah 07:50'de kapatır. Bu saatler değiştirilebilir
 
 ## Özellikler
 - Programların açılış kapanış saatini değiştirme
@@ -16,7 +16,7 @@ Otoin ise indirme programlarınızı gece 02:10'da açar sabah 07:50'de kapatır
 ## İndirme Linkleri
 
 ### Son sürüm
-**v1.0.4** [İndirmek için tıklayın](https://github.com/BekirUzun/Otoin/releases/download/v1.0.4/Otoin-v1.0.4.zip "Otoin-v1.0.4")
+**v1.0.5** [İndirmek için tıklayın](https://github.com/BekirUzun/Otoin/releases/download/v1.0.5/Otoin-v1.0.5.zip "Otoin-v1.0.5")
 
 ### Önceki sürümler
 Önceki sürümler için ["Releases"](https://github.com/BekirUzun/Otoin/releases "Önceki sürümler için tıklayın") kısmına göz atabilirsiniz.

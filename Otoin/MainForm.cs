@@ -277,7 +277,6 @@ namespace Otoin {
                         programPaths.Add(tempPath);
                     }
                 }
-                //selectedProgramPath = Properties.Settings.Default.targetAppLocs;
             }
         }
 
@@ -525,8 +524,8 @@ namespace Otoin {
                 return;
             }
             var github = new GitHubClient(new ProductHeaderValue("Otoin"));
-            var releases = github.Repository.Release.GetAll("BekirUzun", "Otoin");
-            var latestRelease = releases.Result[0];
+            var releases = await github.Repository.Release.GetAll("BekirUzun", "Otoin");
+            var latestRelease = releases[0];
             int latestVersion = Int16.Parse(latestRelease.TagName.Remove(4, 1).Remove(2, 1).Remove(0, 1));
             var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             int currentVersion = v.Major * 100 + v.Minor * 10 + v.Build;
