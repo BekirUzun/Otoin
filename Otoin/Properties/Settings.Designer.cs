@@ -49,54 +49,6 @@ namespace Otoin.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2")]
-        public int startHour {
-            get {
-                return ((int)(this["startHour"]));
-            }
-            set {
-                this["startHour"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("10")]
-        public int startMinute {
-            get {
-                return ((int)(this["startMinute"]));
-            }
-            set {
-                this["startMinute"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("7")]
-        public int stopHour {
-            get {
-                return ((int)(this["stopHour"]));
-            }
-            set {
-                this["stopHour"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("50")]
-        public int stopMinute {
-            get {
-                return ((int)(this["stopMinute"]));
-            }
-            set {
-                this["stopMinute"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("01/01/1971 02:10:00")]
         public global::System.DateTime startTime {
             get {

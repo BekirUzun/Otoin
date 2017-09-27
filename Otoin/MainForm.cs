@@ -23,7 +23,7 @@ namespace Otoin {
         string programFiles32, programFiles64;
 
         public Otoin() {
-            RetrieveSettings();
+            RetrieveSettings(); //programı yeni başlatıyoruz, ayarları dosyadan alalım
             InitializeComponent();
 
             this.Icon = Properties.Resources.icon;
@@ -77,12 +77,12 @@ namespace Otoin {
             stopAction.SelectedIndex = stopActionIndex;
 
             service = new Timer();
-            service.Tick += new EventHandler(Check); //Her 30 saniyede bir Check() çalışsın
-            service.Interval = 5000; // 30 saniyede bir kontrol etsin
+            service.Tick += new EventHandler(Check);
+            service.Interval = 20000; // 20 saniyede bir kontrol etsin
 
             processes = new List<Process>();
-            isManualDelete = true;
-            isTestMode = false;
+            isManualDelete = true; // kullanıcının el ile sildiği programlar için
+            isTestMode = false; //programın çalışma şeklini tutmak için
 
             if (checkUpdates) {
                 // kullanıcı daha önceden "Asla" butonuna basmadı. Asenkron güncelleme kontrolü yapacağız
@@ -91,11 +91,19 @@ namespace Otoin {
             
         }
 
+        /// <summary>
+        /// Kullanıcı program seçmek istediğinde çağırılır. İstediği programı seçmesi için bir pencere açar
+        /// </summary>
         private void filePromptButton_Click(object sender, EventArgs e) {
+            // kullanıcı program seçmek istiyor.
             programPrompt.Filter = "Program (*.exe)|*.exe";
             programPrompt.ShowDialog();
         }
 
+        /// <summary>
+        /// Açılış ve kapanış saatlerinin kutularında bir tuşa basıldığında çağırılır. 
+        /// Karakter doğrulaması için kullanılır.
+        /// </summary>
         private void timeTB_KeyPress(object sender, KeyPressEventArgs e) {
             if (System.Text.RegularExpressions.Regex.IsMatch(e.KeyChar.ToString(), @"[^0-9^:^\b]")) {
                 Log("Geçersiz karakter :(", "error", false);
@@ -145,8 +153,12 @@ namespace Otoin {
             }
         }
 
+        /// <summary>
+        /// Kullanıcı açılan pencereden program seçtikten sonra çalışır
+        /// </summary>
         private void openFileDialog_FileOk(object sender, CancelEventArgs e) {
             if (!programPrompt.CheckFileExists) {
+                // FileOk dan sonra bunu kontrol etmeye gerek olmayabilir ama işimizi garantiye alalım.
                 Log("Program seçilirken bir hata oluştu :(", "error", true);
                 return;
             }
@@ -159,13 +171,19 @@ namespace Otoin {
             EnableButton(testButton);
             SaveSettings();
         }
-        
+
+        /// <summary>
+        /// Program listesinden bir satır silindiğinde çalışır
+        /// </summary>
         private void programsList_RowsRemoved(object sender, DataGridViewRowsRemovedEventArgs e) {
             if (isManualDelete) {
-                //bu kısım kullanıcı el ile bir program sildiğide çalışır, program içi silmelerde çalışmaz
+                //bu kısım sadece kullanıcı el ile bir program sildiğide çalışır
+                // program içi silmelerde çalışmaz
                 programPaths.RemoveAt(e.RowIndex); // satır sıralaması listeyle aynı (umarım)
+            } else {
                 isManualDelete = true; //eski haline çevirelim
             }
+
             if(programPaths.Count == 0) {
                 DisableButton(actionButton);
                 DisableButton(testButton);
@@ -220,6 +238,10 @@ namespace Otoin {
             }
         }
 
+        /// <summary>
+        /// Program penceresi küçültüldüğünde çalışır. Programı görev çubuğu yerine
+        /// sistem tepsisine küçültmek için kullanılır.
+        /// </summary>
         private void skin_Resize(object sender, EventArgs e) {
             if (FormWindowState.Minimized == this.WindowState) {
                 notifyIcon.Visible = true;
@@ -242,6 +264,42 @@ namespace Otoin {
             SaveSettings();
         }
 
+        private void helpSettings_Click(object sender, EventArgs e) {
+            if (help == null) {
+                help = new HelpForm();
+                help.Show();
+            }
+            help.SelectTab(0);
+            help.Show();
+            help.Focus();
+        }
+
+        /// <summary>
+        /// Kapatma eylemi değiştiğinde çağırılır.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void stopAction_SelectedIndexChanged(object sender, EventArgs e) {
+            stopActionIndex = stopAction.SelectedIndex;
+        }
+
+        private void helpPrograms_Click(object sender, EventArgs e) {
+            if (help == null) {
+                //daha önceden yardım formunu oluşturmamışız
+                help = new HelpForm();
+                help.Show();
+            }
+            help.SelectTab(1);
+            help.Show();
+            help.Focus();
+        }
+
+        /// <summary>
+        /// Verilen mesajı kullanıcıya bildirim olarak gösterir. 'writeToFile' true ise dosyaya da kaydeder.
+        /// </summary>
+        /// <param name="message">Gösterilecek mesaj</param>
+        /// <param name="b">Mesaj tipi ('error', 'success', 'info')</param>
+        /// <param name="writeToFile">Mesajın dosyaya yazılık yazılmayacağını belirleyen boolean</param>
         private void Log(string message, string kind, bool writeToFile) {
             if (string.Equals(kind, "success", StringComparison.CurrentCultureIgnoreCase))
                 this.message.kind = FlatUI.FlatAlertBox._Kind.Success;
@@ -262,6 +320,10 @@ namespace Otoin {
             }
         }
 
+        /// <summary>
+        /// Uygulama içinde kullanılacak ayarları ayarlar dosyasında uygulamaya aktarır. 
+        /// Uygulama başlatıldığında çalışır.
+        /// </summary>
         private void RetrieveSettings() {
             programPaths = new List<string>();
             isTested = Properties.Settings.Default.isTested;
@@ -280,6 +342,9 @@ namespace Otoin {
             }
         }
 
+        /// <summary>
+        /// Verilen mesajı kullanıcıya bildirim olarak gösterir. 'writeToFile' true ise dosyaya da kaydeder.
+        /// </summary>
         private void SaveSettings() {
             if (programPaths.Count > 0) {
                 bool valid = true;
@@ -316,30 +381,10 @@ namespace Otoin {
             Properties.Settings.Default.Save();
         }
 
-        private void helpSettings_Click(object sender, EventArgs e) {
-            if (help == null) {
-                help = new HelpForm();
-                help.Show();
-            }
-            help.SelectTab(0);
-            help.Show();
-            help.Focus();
-        }
-
-        private void stopAction_SelectedIndexChanged(object sender, EventArgs e) {
-            stopActionIndex = stopAction.SelectedIndex;
-        }
-
-        private void helpPrograms_Click(object sender, EventArgs e) {
-            if (help == null) {
-                help = new HelpForm();
-                help.Show();
-            }
-            help.SelectTab(1);
-            help.Show();
-            help.Focus();
-        }
-
+        /// <summary>
+        /// Saat kontrolü servisini başlatır. İsim yanıltmasın herhangi bir gerçek servis kullanmaz.
+        /// 'Başlat' ve 'Test Et' butonu ile çağırılır.
+        /// </summary>
         private void StartService() {
             service.Start();
             checkCount = 0;
@@ -350,6 +395,9 @@ namespace Otoin {
             Log("Servis başarılı bir şekilde başlatıldı.", "success", true);
         }
 
+        /// <summary>
+        /// Saat kontrolü servisini durdurur.
+        /// </summary>
         private void StopService() {
             service.Stop();
             isServiceStarted = false;
@@ -359,6 +407,10 @@ namespace Otoin {
             Log("Servis başarılı bir şekilde durduruldu.", "success", true);
         }
 
+        /// <summary>
+        /// Verilen ayarların doğru çalışıp çalışmadığını kullanıcıya göstermek için yazılmıştır. 
+        /// Başlangıç saatini şu andan 1 dakika sonraya, kapanış saatini 2 dakika sonraya ayarlar.
+        /// </summary>
         private void TestService() {
             isTestMode = true;
             
@@ -372,37 +424,46 @@ namespace Otoin {
             checkCount = 0;
             isServiceStarted = true;
             service.Interval = 5000; //işe yarar bir şey yapıyormuş gibi kontrol hızını arttıralım
-            service.Start(); // kontrolü baslatalım başlatalım
+            service.Start(); // kontrolü başlatalım
             Log("Test başarılı bir şekilde başlatıldı.", "success", true);
         }
 
+        /// <summary>
+        /// Açılış ve kapanış saatlerinin formatını doğrular. Saatler ss:dd (hh:mm) formatında olmalıdır
+        /// </summary>
+        /// <returns>Saat formatı doğruysa true döner</returns>
         private bool ValidateTimeInputs() {
             if (!isHourChanged)
-                return true;
+                return true; // saat değişmediyse kontrole gerek yok
 
             char[] start = startTB.Text.ToCharArray();
             char[] stop = stopTB.Text.ToCharArray();
             if (start.Length != 5 || stop.Length != 5) {
+                //uzunluğu tam olarak 5 olmalı
                 Log("Saat formatı ss:dd şeklinde olmalı. (Örn 02:10)", "error", false);
                 return false;
             }
             for (int i = 0; i < start.Length; i++) {
                 if ((!Char.IsNumber(start[i]) || !Char.IsNumber(stop[i])) && i != 2) {
+                    // ortadaki ':' karakteri hariç diğerleri sayı olmalı
                     Log("Saat formatı ss:dd şeklinde olmalı. (Örn 02:10)", "error", false);
                     return false;
                 }
             }
             if (start[2] != ':' || stop[2] != ':') {
+                // ortada ':' karakteri olmalı
                 Log("Saat formatı 02:10 gibi olmalı.", "error", false);
                 return false;
             }
             string[] temp_start = startTB.Text.Split(':');
             if (int.Parse(temp_start[0]) >= 24 || int.Parse(temp_start[1]) >= 60) {
-                Log("O saatde bilgisayar zaten kapalı olur...", "error", false);
+                //saat 23'den dakika 59'dan büyük olamaz
+                Log("O saatde indirmeler zaten açık olur...", "error", false);
                 return false;
             }
             string[] temp_stop = stopTB.Text.Split(':');
             if (int.Parse(temp_stop[0]) >= 24 || int.Parse(temp_stop[1]) >= 60) {
+                //saat 23'den dakika 59'dan büyük olamaz
                 Log("O saatde bilgisayar zaten kapalı olur...", "error", false);
                 return false;
             }
@@ -413,6 +474,10 @@ namespace Otoin {
             return true;
         }
 
+        /// <summary>
+        /// Kullanıcın girdiği program dosya konumlarını doğrular
+        /// </summary>
+        /// <returns>Dosya konumları geçerli ise true döner</returns>
         private bool ValidateProgramPaths() {
             bool valid = true;
             for(int i = 0; i < programPaths.Count; i++) {
@@ -427,16 +492,28 @@ namespace Otoin {
             return valid;
         }
 
+        /// <summary>
+        /// Bir butonu aktişleştirir. Aktifleşen buton basılabilir hale gelir
+        /// </summary>
+        /// <param name="targetButton">Aktifleştirilecek buton</param>
         private void EnableButton(Button targetButton) {
             targetButton.Enabled = true;
             targetButton.BackColor = Color.FromArgb(255, 35, 91, 168);
         }
 
+        /// <summary>
+        /// Bir butonu deaktif konumuna getirir. Aktif olmayan buton ile etkileşim sağlanamaz.
+        /// </summary>
+        /// <param name="targetButton">Deaktifleştirilecek buton</param>
         private void DisableButton(Button targetButton) {
             targetButton.Enabled = false;
             targetButton.BackColor = Color.FromArgb(255, 60, 60, 60);
         }
 
+        /// <summary>
+        /// Girilen açılış ve kapanış saatlerini kontrol eder. Zamanı geldiğinde ilgili işlemleri uygular.
+        /// 'service.Interval' saniyede bir çalışır.
+        /// </summary>
         private void Check(object sender, EventArgs e) {
             //her service.Interval saniyede bir çalışacak fonksiyon
             checkCount++;
@@ -516,6 +593,10 @@ namespace Otoin {
             }
         }
 
+        /// <summary>
+        /// Güncelleme var mı diye kontrol eder. Asenkrondur. Programın son sürüm olup olmadığını 
+        /// Github'daki Release kısmındaki son sürümden kontrol eder.
+        /// </summary>
         private async void CheckUpdate() {
             await Task.Delay(3000);
 
@@ -541,6 +622,10 @@ namespace Otoin {
             }
         }
 
+        /// <summary>
+        /// İnternet erişimini kontrol eder.
+        /// </summary>
+        /// <returns>İnternet erişimi var ise true döner</returns>
         private bool CheckInternetConnection() {
             try {
                 using (var client = new System.Net.WebClient()) {
