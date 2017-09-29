@@ -15,12 +15,14 @@ namespace Otoin {
         HelpForm help;
         List<string> programPaths;
         List<Process> processes;
+        List<PerformanceCounter> networksPC;
         bool isTested, isFirstRun , isTestMode, isProcStarted, isServiceStarted, isHourChanged, isManualDelete;
         bool checkUpdates;
         DateTime startTime, stopTime;
         Timer service;
-        int checkCount, stopActionIndex;
+        int checkCount, totalUsage, noNetActivityCount, stopActionIndex;
         string programFiles32, programFiles64;
+        PerformanceCounter received;
 
         public Otoin() {
             RetrieveSettings(); //programı yeni başlatıyoruz, ayarları dosyadan alalım
@@ -28,9 +30,19 @@ namespace Otoin {
 
             this.Icon = Properties.Resources.icon;
             notifyIcon.Icon = Properties.Resources.icon;
+            aboutVersion.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
             programFiles64 = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
             programFiles32 = Environment.ExpandEnvironmentVariables("%ProgramFiles(x86)%");
+
+            networksPC = new List<PerformanceCounter>();
+            PerformanceCounterCategory category = new PerformanceCounterCategory("Network Interface");
+            string[] networkNames = category.GetInstanceNames();
+            for (int i = 0; i < networkNames.Length; i++) {
+                networksPC.Add(new PerformanceCounter("Network Interface", "Bytes Received/sec", networkNames[i]));
+            }
+            noNetActivityCount = 0;
+            totalUsage = 0;
 
             if (programPaths.Count > 0) {
                 bool valid = true;
@@ -392,6 +404,7 @@ namespace Otoin {
             actionButton.Text = "Durdur";
             actionButton.BackColor = Color.FromArgb(255, 168, 35, 35);
             EnableButton(hideButton);
+            DisableButton(testButton);
             Log("Servis başarılı bir şekilde başlatıldı.", "success", true);
         }
 
@@ -404,7 +417,8 @@ namespace Otoin {
             actionButton.Text = "Başlat!";
             actionButton.BackColor = Color.FromArgb(255, 35, 91, 168);
             DisableButton(hideButton);
-            Log("Servis başarılı bir şekilde durduruldu.", "success", true);
+            EnableButton(testButton);
+            Log("Servis durduruldu. Yapılan toplam indirme " + totalUsage + " kb", "success", true);
         }
 
         /// <summary>
@@ -569,7 +583,7 @@ namespace Otoin {
                             shutDown.CreateNoWindow = true;
                             shutDown.UseShellExecute = false;
                             Process.Start(shutDown);
-                        } else if(stopActionIndex ==4) {
+                        } else if(stopActionIndex == 4) {
                             //bilgisayarı kapatmaya zorla
                             var shutDown = new ProcessStartInfo("shutdown", "/s /f /t 0");
                             shutDown.CreateNoWindow = true;
@@ -588,8 +602,36 @@ namespace Otoin {
                     Log(checkCount + ". kontrol yapıldı", "info", false);
                 }
 
-                // TODO: check network activity here!!!
+                int speedKbPs = GetNetworkUsage() / 1024;
+                totalUsage += speedKbPs * service.Interval / 1000;
 
+                if (speedKbPs < 50) {
+                    noNetActivityCount++;
+                    Log("İndirme yapılmadı. Sayaç = " + noNetActivityCount, "error", true);
+                    if (noNetActivityCount * service.Interval / 1000 > 600) {
+                        //bu kısıma her service.Interval milisaniyede bir geliyoruz.
+                        //service.Interval / 1000 bunu saniyeye çevirir, onu noNetActivityCount ile
+                        //çarpmak kaç saniyedir indirme yapılmadığını verir
+
+                        //10 dakikadır herhangi bir indirme yapılmadı, muhtemelen her şey tamamlandı.
+                        Log("10 dakikadır herhangi bir indirme yapılmadı. Bilgisayar kapatılıyor", "error", true);
+                        processes.Clear();
+                        StopService();
+                        DoStopAction();
+                    }
+                }
+                else {
+                    // ufak bir optimizasyon. Bazen torent geçici olarak yavaşlayabilir.
+                    // Eğer tekrar indirme yaparsak sayacı azalmalıyız.Örneğin 1 saatde 3-4 defa
+                    // yavaşlama olduğunu veya torrentin bir tanesinin bitip diğeri bağlanma aşamasında
+                    // olduğunu varsayarsak sayaç birkaç saat içinde fazla ilerlediği için programı kapatabilir.
+                    // Bu kontrol ile indirme yapılmayan dakikaların indirme yapılan dakikalardan büyük olduğu
+                    // garantilenir. Örneğin son 12 dakikanın 11inde indirme yapılmıyor, 1inde yapılıyorsa
+                    // muhtemelen indirmeler tamamlanmıştır. 
+                    if (noNetActivityCount > 0)
+                        noNetActivityCount--;
+                    Log("İndirme yapıldı. Sayaç = " + noNetActivityCount, "success", true);
+                }
             }
         }
 
@@ -638,5 +680,48 @@ namespace Otoin {
                 return false;
             }
         }
+
+        /// <summary>
+        /// Tüm ağlardaki toplam internet hızını kontrol eder
+        /// </summary>
+        /// <returns>İnternet hızını byte/saniye cinsinden döndürür</returns>
+        private int GetNetworkUsage() {
+            int usage = 0;
+            for (int i = 0; i < networksPC.Count; i++) {
+                usage += (int)networksPC[i].NextValue();
+            }
+            return usage;
+        }
+
+        /// <summary>
+        /// Kapanış saati geldiğinde arayüzden seçilen eylemi uygular
+        /// </summary>
+        private void DoStopAction() {
+            //kapanış saati geldiğinde ne yapacağımıza bakalım
+            if (stopActionIndex == 1) {
+                //bilgisayarı uyut (sleep/suspend)
+                System.Windows.Forms.Application.SetSuspendState(PowerState.Suspend, true, true);
+            }
+            else if (stopActionIndex == 2) {
+                //bilgisayarı hazırda beklet (hibernate)
+                System.Windows.Forms.Application.SetSuspendState(PowerState.Hibernate, true, true);
+            }
+            else if (stopActionIndex == 3) {
+                //bilgisayarı kapat
+                var shutDown = new ProcessStartInfo("shutdown", "/s /t 0"); // "shutdown", "/s /f /t 0" -> zorla kapatma
+                shutDown.CreateNoWindow = true;
+                shutDown.UseShellExecute = false;
+                Process.Start(shutDown);
+            }
+            else if (stopActionIndex == 4) {
+                //bilgisayarı kapatmaya zorla
+                var shutDown = new ProcessStartInfo("shutdown", "/s /f /t 0");
+                shutDown.CreateNoWindow = true;
+                shutDown.UseShellExecute = false;
+                Process.Start(shutDown);
+            }
+            //selectedIndex == 0 ise hiçbir şey yapmayacağız
+        }
+
     }
 }
