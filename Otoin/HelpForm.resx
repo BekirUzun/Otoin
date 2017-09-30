@@ -149,7 +149,7 @@ Servisi etkinleştirir. Program belirli aralıklarla saati kontrol eder ve zaman
     <value>Bu pencereden başlangıç zamanı geldiğinde açılacak programları seçebilirsiniz. 
 
 
-Listedeki programlardan silmek istediğinizi seçip klavyenizden "Delete" tuşuna basarak silebilirsiniz.
+Listedeki programlardan silmek istediğinizi seçip klavyenizden "Delete" tuşuna basarak veya sağ tıklayıp "Sil" seçeneğine tıklayarak silebilirsiniz.
 
 
 İndirme programlarınızı (Torrent, Steam vb.) bulup listeye eklemeye çalışır. Bulma işlemi, listemizdeki programların varsayılan konumlarına bakar.

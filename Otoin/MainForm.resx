@@ -123,6 +123,9 @@
   <metadata name="programPathCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <metadata name="rightClickMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>262, 17</value>
+  </metadata>
   <data name="aboutText.Text" xml:space="preserve">
     <value>Otoin, 1 Mayıs'da çıkan AKK yasasından en iyi şekilde yararlanmanızı sağlar. Bu yasada gece 02:00 ile 08:00 arasında yaptığınız internet kullanımı AKK'ye sayılmaz ve AKK sonrası yavaşlamadan etkilenmez. Otoin ise indirme programlarınızı gece 02:05'de açar sabah 07:55'de kapatır.
 

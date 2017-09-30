@@ -408,6 +408,33 @@ namespace Otoin {
             Log("Servis başarılı bir şekilde başlatıldı.", "success", true);
         }
 
+        private void rightClickMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
+            if(e.ClickedItem.Text == "Sil") {
+                var rowsToDelete = programsList.SelectedRows;
+                foreach( DataGridViewRow row in rowsToDelete) {
+                    programsList.Rows.Remove(row);
+                }
+            }
+        }
+
+        private void programsList_CellMouseDown(object sender, DataGridViewCellMouseEventArgs e) {
+
+            MouseEventArgs click = (MouseEventArgs)e;
+            if (click.Button == MouseButtons.Right) {
+                if (!programsList.Rows[e.RowIndex].Selected) {
+                    //sağ tıklanılan satır seçilmemişse sadece o satırı seçelim
+                    foreach (DataGridViewRow row in programsList.SelectedRows) {
+                        row.Selected = false;
+                    }
+                    programsList.Rows[e.RowIndex].Selected = true;
+                }
+                //sağ tıklanılan satır seçilmişse seçimleri değiştirmeyelim.
+                // birden çok satır seçilip sağ tıklanırsa önceki seçimlerin
+                // kaybolmaması için.
+            }
+        }
+
+
         /// <summary>
         /// Saat kontrolü servisini durdurur.
         /// </summary>
