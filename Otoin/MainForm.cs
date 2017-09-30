@@ -418,7 +418,24 @@ namespace Otoin {
             actionButton.BackColor = Color.FromArgb(255, 35, 91, 168);
             DisableButton(hideButton);
             EnableButton(testButton);
-            Log("Servis durduruldu. Yapılan toplam indirme " + totalUsage + " kb", "success", true);
+            float usageDisplay;
+            string usageUnit;
+            if (totalUsage > 1024 && totalUsage < 1024*1024) {
+                //toplam indirmeyi mb cinsinden göstereceğiz
+                usageDisplay = (float)totalUsage / 1024;
+                usageUnit = " MB";
+            }
+            else if (totalUsage > 1024*1024) {
+                //toplam indirmeyi gb cinsinden göstereceğiz
+                usageDisplay = ((float)totalUsage / 1024 ) / 1024;
+                usageUnit = " GB";
+            }
+            else {
+                //toplamı kb cinsinden göstereceğiz.
+                usageDisplay = totalUsage;
+                usageUnit = " KB";
+            }
+            Log("Servis durduruldu. Yapılan toplam indirme " + usageDisplay.ToString("0.00") + usageUnit, "success", true);
         }
 
         /// <summary>
@@ -570,27 +587,7 @@ namespace Otoin {
                             EnableButton(actionButton);
                         }
 
-                        //kapanış saati geldiğinde ne yapacağımıza bakalım
-                        if (stopActionIndex == 1) {
-                            //bilgisayarı uyut (sleep/suspend)
-                            System.Windows.Forms.Application.SetSuspendState(PowerState.Suspend, true, true);
-                        } else if (stopActionIndex == 2) {
-                            //bilgisayarı hazırda beklet (hibernate)
-                            System.Windows.Forms.Application.SetSuspendState(PowerState.Hibernate, true, true);
-                        } else if (stopActionIndex == 3) {
-                            //bilgisayarı kapat
-                            var shutDown = new ProcessStartInfo("shutdown", "/s /t 0"); // "shutdown", "/s /f /t 0" -> zorla kapatma
-                            shutDown.CreateNoWindow = true;
-                            shutDown.UseShellExecute = false;
-                            Process.Start(shutDown);
-                        } else if(stopActionIndex == 4) {
-                            //bilgisayarı kapatmaya zorla
-                            var shutDown = new ProcessStartInfo("shutdown", "/s /f /t 0");
-                            shutDown.CreateNoWindow = true;
-                            shutDown.UseShellExecute = false;
-                            Process.Start(shutDown);
-                        }
-                        //selectedIndex == 0 ise hiçbir şey yapmayacağız
+                        DoStopAction();
                         
                     }
                     catch (Exception ex) {
@@ -607,14 +604,14 @@ namespace Otoin {
 
                 if (speedKbPs < 50) {
                     noNetActivityCount++;
-                    Log("İndirme yapılmadı. Sayaç = " + noNetActivityCount, "error", true);
+                    Log("İndirme yapılmadı.", "error", true);
                     if (noNetActivityCount * service.Interval / 1000 > 600) {
                         //bu kısıma her service.Interval milisaniyede bir geliyoruz.
                         //service.Interval / 1000 bunu saniyeye çevirir, onu noNetActivityCount ile
                         //çarpmak kaç saniyedir indirme yapılmadığını verir
 
                         //10 dakikadır herhangi bir indirme yapılmadı, muhtemelen her şey tamamlandı.
-                        Log("10 dakikadır herhangi bir indirme yapılmadı. Bilgisayar kapatılıyor", "error", true);
+                        Log("10 dakikadır herhangi bir indirme yapılmadı. Kapanış eylemi uygulanıyor.", "error", true);
                         processes.Clear();
                         StopService();
                         DoStopAction();
@@ -630,7 +627,7 @@ namespace Otoin {
                     // muhtemelen indirmeler tamamlanmıştır. 
                     if (noNetActivityCount > 0)
                         noNetActivityCount--;
-                    Log("İndirme yapıldı. Sayaç = " + noNetActivityCount, "success", true);
+                    //Log("İndirme yapıldı. Sayaç = " + noNetActivityCount, "success", true);
                 }
             }
         }
@@ -654,11 +651,11 @@ namespace Otoin {
             int currentVersion = v.Major * 100 + v.Minor * 10 + v.Build;
 
             if (latestVersion > currentVersion) {
-                shadow.Image = Properties.Resources.blur;
-                shadow.BackColor = Color.Transparent;
-                shadow.Visible = true;
+                blur.Image = Properties.Resources.blur;
+                blur.BackColor = Color.Transparent;
+                blur.Visible = true;
 
-                UpdateForm update = new UpdateForm(shadow);
+                UpdateForm update = new UpdateForm(blur);
                 update.Show();
                 update.Focus();
             }

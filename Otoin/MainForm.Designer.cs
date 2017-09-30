@@ -30,7 +30,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Otoin));
             this.skin = new FlatUI.FormSkin();
-            this.shadow = new System.Windows.Forms.PictureBox();
+            this.blur = new System.Windows.Forms.PictureBox();
             this.tabControl = new FlatUI.FlatTabControl();
             this.settingsTab = new System.Windows.Forms.TabPage();
             this.stopAction = new FlatUI.FlatComboBox();
@@ -82,7 +82,7 @@
             this.programPrompt = new System.Windows.Forms.OpenFileDialog();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.skin.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.shadow)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.blur)).BeginInit();
             this.tabControl.SuspendLayout();
             this.settingsTab.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -97,7 +97,7 @@
             this.skin.BackColor = System.Drawing.Color.White;
             this.skin.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
             this.skin.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(58)))), ((int)(((byte)(60)))));
-            this.skin.Controls.Add(this.shadow);
+            this.skin.Controls.Add(this.blur);
             this.skin.Controls.Add(this.tabControl);
             this.skin.Controls.Add(this.bgTop);
             this.skin.Controls.Add(this.minimizeBtn);
@@ -116,16 +116,16 @@
             this.skin.Text = "Otoin";
             this.skin.Resize += new System.EventHandler(this.skin_Resize);
             // 
-            // shadow
+            // blur
             // 
-            this.shadow.BackColor = System.Drawing.Color.Transparent;
-            this.shadow.InitialImage = global::Otoin.Properties.Resources.shadow;
-            this.shadow.Location = new System.Drawing.Point(0, 0);
-            this.shadow.Name = "shadow";
-            this.shadow.Size = new System.Drawing.Size(525, 375);
-            this.shadow.TabIndex = 18;
-            this.shadow.TabStop = false;
-            this.shadow.Visible = false;
+            this.blur.BackColor = System.Drawing.Color.Transparent;
+            this.blur.InitialImage = global::Otoin.Properties.Resources.shadow;
+            this.blur.Location = new System.Drawing.Point(0, 0);
+            this.blur.Name = "blur";
+            this.blur.Size = new System.Drawing.Size(199, 47);
+            this.blur.TabIndex = 18;
+            this.blur.TabStop = false;
+            this.blur.Visible = false;
             // 
             // tabControl
             // 
@@ -858,7 +858,7 @@
             this.Text = "Otoin";
             this.TransparencyKey = System.Drawing.Color.Fuchsia;
             this.skin.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.shadow)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.blur)).EndInit();
             this.tabControl.ResumeLayout(false);
             this.settingsTab.ResumeLayout(false);
             this.settingsTab.PerformLayout();
@@ -931,7 +931,7 @@
         private System.Windows.Forms.Button helpPrograms;
         private FlatUI.FlatComboBox stopAction;
         private FlatUI.FlatLabel flatLabel8;
-        private System.Windows.Forms.PictureBox shadow;
+        private System.Windows.Forms.PictureBox blur;
     }
 }
 
