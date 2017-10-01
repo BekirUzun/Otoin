@@ -664,7 +664,7 @@ namespace Otoin {
         /// Github'daki Release kısmındaki son sürümden kontrol eder.
         /// </summary>
         private async void CheckUpdate() {
-            await Task.Delay(3000);
+            await Task.Delay(1000);
 
             if (!CheckInternetConnection()) {
                 Log("İnternet bağlantınız olmadığından güncelleme kontrol edilemedi :(", "error", true);
@@ -680,6 +680,8 @@ namespace Otoin {
             if (latestVersion > currentVersion) {
                 blur.Image = Properties.Resources.blur;
                 blur.BackColor = Color.Transparent;
+                blur.BringToFront();
+                blur.Invalidate();
                 blur.Visible = true;
 
                 UpdateForm update = new UpdateForm(blur);

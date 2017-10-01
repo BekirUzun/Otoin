@@ -100,13 +100,13 @@
             this.skin.BackColor = System.Drawing.Color.White;
             this.skin.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
             this.skin.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(53)))), ((int)(((byte)(58)))), ((int)(((byte)(60)))));
-            this.skin.Controls.Add(this.blur);
             this.skin.Controls.Add(this.tabControl);
             this.skin.Controls.Add(this.bgTop);
             this.skin.Controls.Add(this.minimizeBtn);
             this.skin.Controls.Add(this.message);
             this.skin.Controls.Add(this.closeBtn);
             this.skin.Controls.Add(this.panel3);
+            this.skin.Controls.Add(this.blur);
             this.skin.Dock = System.Windows.Forms.DockStyle.Fill;
             this.skin.FlatColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
             this.skin.Font = new System.Drawing.Font("Segoe UI", 12F);
@@ -125,7 +125,7 @@
             this.blur.InitialImage = global::Otoin.Properties.Resources.shadow;
             this.blur.Location = new System.Drawing.Point(0, 0);
             this.blur.Name = "blur";
-            this.blur.Size = new System.Drawing.Size(199, 47);
+            this.blur.Size = new System.Drawing.Size(525, 375);
             this.blur.TabIndex = 18;
             this.blur.TabStop = false;
             this.blur.Visible = false;

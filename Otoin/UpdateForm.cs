@@ -5,9 +5,9 @@ using System.Windows.Forms;
 namespace Otoin {
     public partial class UpdateForm : Form {
 
-        PictureBox shadow;
-        public UpdateForm(PictureBox shadow) {
-            this.shadow = shadow;
+        PictureBox blur;
+        public UpdateForm(PictureBox blur) {
+            this.blur = blur;
             InitializeComponent();
         }
 
@@ -28,7 +28,8 @@ namespace Otoin {
         }
 
         private void CloseForm() {
-            shadow.Visible = false;
+            blur.Visible = false;
+            blur.SendToBack();          
             this.Close();
             this.Dispose();
         }
