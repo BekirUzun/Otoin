@@ -76,7 +76,6 @@ namespace Otoin {
             notifyIcon.Icon = Properties.Resources.icon;
             aboutVersion.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
-            ChangeConsoleLockSetting(true);
             programFiles64 = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
             programFiles32 = Environment.ExpandEnvironmentVariables("%ProgramFiles(x86)%");
 
@@ -133,10 +132,13 @@ namespace Otoin {
             stopAction.SelectedIndex = stopActionIndex;
 
             if (sleepMode) {
+                logicalChange = true;
                 modeSleep.Checked = true;
+            } else {
+                //uyandırma görevi Durdur butonuna basılınca siliniyor ama ne olur ne olmaz
+                // kimsenin bilgisayarını gece gereksiz uyandırmadığımızdan emin olalım :)
+                DeleteTask();
             }
-
-            logicalChange = true;
 
             service = new Timer();
             service.Tick += new EventHandler(Check);
@@ -465,8 +467,8 @@ namespace Otoin {
         }
 
         private void sleepButton_Click(object sender, EventArgs e) {
-
-            //System.Windows.Forms.Application.SetSuspendState(PowerState.Suspend, true, true);
+            //bilgisayarı uyku moduna alalım
+            System.Windows.Forms.Application.SetSuspendState(PowerState.Suspend, true, true);
         }
 
         /// <summary>
@@ -478,9 +480,7 @@ namespace Otoin {
 
             if (sleepMode) {
                 DisableButton(sleepButton);
-                using (TaskService ts = new TaskService()) {
-                    ts.RootFolder.DeleteTask("Otoin Uyandırma");
-                }
+                DeleteTask();
             }
 
             actionButton.Text = "Başlat!";
@@ -584,8 +584,7 @@ namespace Otoin {
                     ChangeConsoleLockSetting(true);
                 }
             }
-
-            if (logicalChange) {
+            else {
                 logicalChange = false;
             }
 
@@ -887,6 +886,12 @@ namespace Otoin {
 
                 // Kaydettiğimiz görevi silelim
                 //ts.RootFolder.DeleteTask("Otoin Uyandırma");
+            }
+        }
+
+        private void DeleteTask() {
+            using (TaskService ts = new TaskService()) {
+                ts.RootFolder.DeleteTask("Otoin Uyandırma");
             }
         }
     }

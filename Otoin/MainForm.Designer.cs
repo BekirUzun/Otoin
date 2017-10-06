@@ -242,7 +242,7 @@
             this.actionButton.FlatAppearance.BorderSize = 0;
             this.actionButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.actionButton.ForeColor = System.Drawing.Color.White;
-            this.actionButton.Location = new System.Drawing.Point(364, 176);
+            this.actionButton.Location = new System.Drawing.Point(363, 176);
             this.actionButton.Name = "actionButton";
             this.actionButton.Size = new System.Drawing.Size(106, 32);
             this.actionButton.TabIndex = 11;
@@ -285,7 +285,7 @@
             this.sleepButton.FlatAppearance.BorderSize = 0;
             this.sleepButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.sleepButton.ForeColor = System.Drawing.Color.White;
-            this.sleepButton.Location = new System.Drawing.Point(364, 124);
+            this.sleepButton.Location = new System.Drawing.Point(251, 176);
             this.sleepButton.Name = "sleepButton";
             this.sleepButton.Size = new System.Drawing.Size(106, 32);
             this.sleepButton.TabIndex = 11;
@@ -344,7 +344,7 @@
             this.hideButton.FlatAppearance.BorderSize = 0;
             this.hideButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.hideButton.ForeColor = System.Drawing.Color.White;
-            this.hideButton.Location = new System.Drawing.Point(203, 176);
+            this.hideButton.Location = new System.Drawing.Point(139, 176);
             this.hideButton.Name = "hideButton";
             this.hideButton.Size = new System.Drawing.Size(106, 32);
             this.hideButton.TabIndex = 11;
