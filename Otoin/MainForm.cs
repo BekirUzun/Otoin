@@ -158,7 +158,8 @@ namespace Otoin {
                 Log(foundPrograms + " program bulundu.", "success", false);
                 EnableButton(actionButton); //kapalı olan butonları aktifleştirelim
                 SaveSettings();
-            } else {
+            }
+            else {
                 Log("Herhangi bir program bulunamadı. Manuel ekleyiniz.", "error", false);
             }
         }
@@ -188,11 +189,12 @@ namespace Otoin {
                 //bu kısım sadece kullanıcı el ile bir program sildiğide çalışır
                 // program içi silmelerde çalışmaz
                 programPaths.RemoveAt(e.RowIndex); // satır sıralaması listeyle aynı (umarım)
-            } else {
+            }
+            else {
                 isManualDelete = true; //eski haline çevirelim
             }
 
-            if(programPaths.Count == 0) {
+            if (programPaths.Count == 0) {
                 DisableButton(actionButton);
             }
 
@@ -310,9 +312,9 @@ namespace Otoin {
             stopActionIndex = Properties.Settings.Default.stopAction;
             checkUpdates = Properties.Settings.Default.updateCheck;
             if (!isFirstRun) {
-                if(Properties.Settings.Default.targetAppLocs.Length > 0) {
+                if (Properties.Settings.Default.targetAppLocs.Length > 0) {
                     string[] tempPaths = Properties.Settings.Default.targetAppLocs.Split(';');
-                    foreach(string tempPath in tempPaths) {
+                    foreach (string tempPath in tempPaths) {
                         programPaths.Add(tempPath);
                     }
                 }
@@ -332,7 +334,8 @@ namespace Otoin {
                         programPaths.RemoveAt(i);
                         programsList.Rows.RemoveAt(i--);
                         valid = false;
-                    } else {
+                    }
+                    else {
                         if (programPathsString == "")
                             programPathsString = programPaths[i];
                         else
@@ -344,7 +347,8 @@ namespace Otoin {
                 if (!valid) {
                     Log("Seçtiğiniz programların konumu doğrularken bir hata oluştu. :(", "error", true);
                 }
-            } else {
+            }
+            else {
                 Properties.Settings.Default.targetAppLocs = "";
             }
             ValidateTimeInputs();
@@ -362,6 +366,7 @@ namespace Otoin {
         /// 'Başlat' butonu ile çağırılır.
         /// </summary>
         private void StartService() {
+            SaveSettings();
             service.Start();
             checkCount = 0;
             isServiceStarted = true;
@@ -372,9 +377,9 @@ namespace Otoin {
         }
 
         private void rightClickMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
-            if(e.ClickedItem.Text == "Sil") {
+            if (e.ClickedItem.Text == "Sil") {
                 var rowsToDelete = programsList.SelectedRows;
-                foreach( DataGridViewRow row in rowsToDelete) {
+                foreach (DataGridViewRow row in rowsToDelete) {
                     programsList.Rows.Remove(row);
                 }
             }
@@ -409,14 +414,14 @@ namespace Otoin {
             DisableButton(hideButton);
             float usageDisplay;
             string usageUnit;
-            if (totalUsage > 1024 && totalUsage < 1024*1024) {
+            if (totalUsage > 1024 && totalUsage < 1024 * 1024) {
                 //toplam indirmeyi mb cinsinden göstereceğiz
                 usageDisplay = (float)totalUsage / 1024;
                 usageUnit = " MB";
             }
-            else if (totalUsage > 1024*1024) {
+            else if (totalUsage > 1024 * 1024) {
                 //toplam indirmeyi gb cinsinden göstereceğiz
-                usageDisplay = ((float)totalUsage / 1024 ) / 1024;
+                usageDisplay = ((float)totalUsage / 1024) / 1024;
                 usageUnit = " GB";
             }
             else {
@@ -479,7 +484,7 @@ namespace Otoin {
         /// <returns>Dosya konumları geçerli ise true döner</returns>
         private bool ValidateProgramPaths() {
             bool valid = true;
-            for(int i = 0; i < programPaths.Count; i++) {
+            for (int i = 0; i < programPaths.Count; i++) {
                 if (!File.Exists(programPaths[i])) {
                     isManualDelete = false; //
                     programPaths.RemoveAt(i);
@@ -517,16 +522,17 @@ namespace Otoin {
             //her service.Interval saniyede bir çalışacak fonksiyon
             checkCount++;
             if (!isProcStarted) {
-                if (DateTime.Now.Hour == startTime.Hour && DateTime.Now.Minute == startTime.Minute) { 
+                if (DateTime.Now.Hour == startTime.Hour && DateTime.Now.Minute == startTime.Minute) {
                     try {
-                        for(int i = 0; i < programPaths.Count; i++) {
+                        for (int i = 0; i < programPaths.Count; i++) {
                             processes.Add(Process.Start(programPaths[i]));
                         }
 
                         Log(checkCount + ". kontrolde " + processes.Count + " program başlatıldı!", "success", true);
                         isProcStarted = true;
                         checkCount = 0;
-                    } catch (Exception ex) {
+                    }
+                    catch (Exception ex) {
                         Log(ex.Message, "error", true);
                     }
                 }
@@ -665,7 +671,7 @@ namespace Otoin {
             }
             else if (stopActionIndex == 3) {
                 //bilgisayarı kapat
-                var shutDown = new ProcessStartInfo("shutdown", "/s /t 0"); // "shutdown", "/s /f /t 0" -> zorla kapatma
+                var shutDown = new ProcessStartInfo("shutdown", "/s /t 0");
                 shutDown.CreateNoWindow = true;
                 shutDown.UseShellExecute = false;
                 Process.Start(shutDown);
