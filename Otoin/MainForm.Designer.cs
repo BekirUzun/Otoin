@@ -24,13 +24,12 @@
         /// </summary>
         private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Otoin));
             this.skin = new FlatUI.FormSkin();
-            this.blur = new System.Windows.Forms.PictureBox();
             this.tabControl = new FlatUI.FlatTabControl();
             this.settingsTab = new System.Windows.Forms.TabPage();
             this.stopAction = new FlatUI.FlatComboBox();
@@ -41,6 +40,7 @@
             this.actionButton = new System.Windows.Forms.Button();
             this.panel2 = new System.Windows.Forms.Panel();
             this.startTB = new System.Windows.Forms.TextBox();
+            this.sleepButton = new System.Windows.Forms.Button();
             this.helpSettings = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.stopTB = new System.Windows.Forms.TextBox();
@@ -80,10 +80,10 @@
             this.message = new FlatUI.FlatAlertBox();
             this.closeBtn = new FlatUI.FlatClose();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.blur = new System.Windows.Forms.PictureBox();
             this.programPrompt = new System.Windows.Forms.OpenFileDialog();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.skin.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.blur)).BeginInit();
             this.tabControl.SuspendLayout();
             this.settingsTab.SuspendLayout();
             this.panel2.SuspendLayout();
@@ -92,6 +92,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.programsList)).BeginInit();
             this.rightClickMenu.SuspendLayout();
             this.aboutTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.blur)).BeginInit();
             this.SuspendLayout();
             // 
             // skin
@@ -117,17 +118,6 @@
             this.skin.TabIndex = 0;
             this.skin.Text = "Otoin";
             this.skin.Resize += new System.EventHandler(this.skin_Resize);
-            // 
-            // blur
-            // 
-            this.blur.BackColor = System.Drawing.Color.Transparent;
-            this.blur.InitialImage = global::Otoin.Properties.Resources.shadow;
-            this.blur.Location = new System.Drawing.Point(0, 0);
-            this.blur.Name = "blur";
-            this.blur.Size = new System.Drawing.Size(525, 375);
-            this.blur.TabIndex = 18;
-            this.blur.TabStop = false;
-            this.blur.Visible = false;
             // 
             // tabControl
             // 
@@ -155,6 +145,7 @@
             this.settingsTab.Controls.Add(this.flatLabel7);
             this.settingsTab.Controls.Add(this.actionButton);
             this.settingsTab.Controls.Add(this.panel2);
+            this.settingsTab.Controls.Add(this.sleepButton);
             this.settingsTab.Controls.Add(this.helpSettings);
             this.settingsTab.Controls.Add(this.panel1);
             this.settingsTab.Controls.Add(this.hideButton);
@@ -207,8 +198,7 @@
             this.modeSleep.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
             this.modeSleep.Checked = false;
             this.modeSleep.Cursor = System.Windows.Forms.Cursors.Default;
-            this.modeSleep.Enabled = false;
-            this.modeSleep.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Strikeout);
+            this.modeSleep.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.modeSleep.ForeColor = System.Drawing.SystemColors.ControlLight;
             this.modeSleep.Location = new System.Drawing.Point(215, 37);
             this.modeSleep.Name = "modeSleep";
@@ -216,7 +206,7 @@
             this.modeSleep.Size = new System.Drawing.Size(65, 22);
             this.modeSleep.TabIndex = 16;
             this.modeSleep.Text = "Uyku";
-            this.modeSleep.Visible = false;
+            this.modeSleep.CheckedChanged += new FlatUI.FlatRadioButton.CheckedChangedEventHandler(this.modeSleep_CheckedChanged);
             // 
             // modeNormal
             // 
@@ -286,6 +276,23 @@
             this.startTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.startTB.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.timeTB_KeyPress);
             // 
+            // sleepButton
+            // 
+            this.sleepButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
+            this.sleepButton.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.sleepButton.Enabled = false;
+            this.sleepButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
+            this.sleepButton.FlatAppearance.BorderSize = 0;
+            this.sleepButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.sleepButton.ForeColor = System.Drawing.Color.White;
+            this.sleepButton.Location = new System.Drawing.Point(364, 124);
+            this.sleepButton.Name = "sleepButton";
+            this.sleepButton.Size = new System.Drawing.Size(106, 32);
+            this.sleepButton.TabIndex = 11;
+            this.sleepButton.Text = "Uyut\r\n";
+            this.sleepButton.UseVisualStyleBackColor = false;
+            this.sleepButton.Click += new System.EventHandler(this.sleepButton_Click);
+            // 
             // helpSettings
             // 
             this.helpSettings.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(168)))), ((int)(((byte)(109)))));
@@ -308,7 +315,7 @@
             this.panel1.Controls.Add(this.stopTB);
             this.panel1.ForeColor = System.Drawing.SystemColors.Window;
             this.panel1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.panel1.Location = new System.Drawing.Point(372, 74);
+            this.panel1.Location = new System.Drawing.Point(382, 74);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(70, 30);
             this.panel1.TabIndex = 13;
@@ -363,7 +370,7 @@
             this.stopLabel.BackColor = System.Drawing.Color.Transparent;
             this.stopLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.stopLabel.ForeColor = System.Drawing.Color.White;
-            this.stopLabel.Location = new System.Drawing.Point(270, 79);
+            this.stopLabel.Location = new System.Drawing.Point(280, 79);
             this.stopLabel.Name = "stopLabel";
             this.stopLabel.Size = new System.Drawing.Size(96, 19);
             this.stopLabel.TabIndex = 5;
@@ -436,22 +443,22 @@
             this.programsList.AllowUserToAddRows = false;
             this.programsList.AllowUserToResizeColumns = false;
             this.programsList.AllowUserToResizeRows = false;
-            dataGridViewCellStyle5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.Color.White;
-            this.programsList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.Color.White;
+            this.programsList.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             this.programsList.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
             this.programsList.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.programsList.ColumnHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(63)))));
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Segoe UI", 10F);
-            dataGridViewCellStyle6.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.programsList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(50)))), ((int)(((byte)(60)))), ((int)(((byte)(63)))));
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Segoe UI", 10F);
+            dataGridViewCellStyle2.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.programsList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.programsList.ColumnHeadersHeight = 30;
             this.programsList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.programNameCol,
@@ -463,20 +470,20 @@
             this.programsList.Location = new System.Drawing.Point(-42, 0);
             this.programsList.Name = "programsList";
             this.programsList.RowHeadersBorderStyle = System.Windows.Forms.DataGridViewHeaderBorderStyle.Single;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Segoe UI", 10F);
-            dataGridViewCellStyle7.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.programsList.RowHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Segoe UI", 10F);
+            dataGridViewCellStyle3.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.programsList.RowHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.programsList.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.Color.White;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.Color.White;
-            this.programsList.RowsDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.Color.White;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.Color.White;
+            this.programsList.RowsDefaultCellStyle = dataGridViewCellStyle4;
             this.programsList.RowTemplate.DefaultCellStyle.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
             this.programsList.RowTemplate.DefaultCellStyle.ForeColor = System.Drawing.Color.White;
             this.programsList.RowTemplate.DefaultCellStyle.SelectionBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(35)))), ((int)(((byte)(91)))), ((int)(((byte)(168)))));
@@ -834,6 +841,17 @@
             this.panel3.Size = new System.Drawing.Size(525, 325);
             this.panel3.TabIndex = 16;
             // 
+            // blur
+            // 
+            this.blur.BackColor = System.Drawing.Color.Transparent;
+            this.blur.InitialImage = global::Otoin.Properties.Resources.shadow;
+            this.blur.Location = new System.Drawing.Point(0, 0);
+            this.blur.Name = "blur";
+            this.blur.Size = new System.Drawing.Size(525, 375);
+            this.blur.TabIndex = 18;
+            this.blur.TabStop = false;
+            this.blur.Visible = false;
+            // 
             // programPrompt
             // 
             this.programPrompt.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog_FileOk);
@@ -861,7 +879,6 @@
             this.Text = "Otoin";
             this.TransparencyKey = System.Drawing.Color.Fuchsia;
             this.skin.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.blur)).EndInit();
             this.tabControl.ResumeLayout(false);
             this.settingsTab.ResumeLayout(false);
             this.settingsTab.PerformLayout();
@@ -874,6 +891,7 @@
             this.rightClickMenu.ResumeLayout(false);
             this.aboutTab.ResumeLayout(false);
             this.aboutTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.blur)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -937,6 +955,7 @@
         private System.Windows.Forms.PictureBox blur;
         private FlatUI.FlatContextMenuStrip rightClickMenu;
         private System.Windows.Forms.ToolStripMenuItem silToolStripMenuItem;
+        private System.Windows.Forms.Button sleepButton;
     }
 }
 

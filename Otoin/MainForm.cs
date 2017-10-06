@@ -8,10 +8,13 @@ using System.IO;
 using System.Windows.Forms;
 using System.Threading.Tasks;
 using Octokit;
+using Microsoft.Win32.TaskScheduler;
+using System.Runtime.InteropServices;
 
 namespace Otoin {
     public partial class Otoin : Form {
 
+        #region Fields
         HelpForm help;
         List<string> programPaths;
         List<Process> processes;
@@ -23,7 +26,47 @@ namespace Otoin {
         Timer service;
         int checkCount, totalUsage, noNetActivityCount, stopActionIndex;
         string programFiles32, programFiles64;
-        PerformanceCounter received;
+        Guid scheme;
+        #endregion
+
+        #region Constants
+        private static readonly Guid CONSOLELOCK = new Guid("0e796bdb-100d-47d6-a2d5-f7d2daa51f51");
+        private static readonly Guid SUB_NONE = new Guid("fea3413e-7e05-4911-9a71-700331f1c294");
+        private static readonly Guid RTCWAKE = new Guid("bd3b718a-0680-4d9d-8ab2-e1d2b4ac806d");
+        private static readonly Guid SUB_SLEEP = new Guid("238C9FA8-0AAD-41ED-83F4-97BE242C8F20");
+        #endregion
+
+        #region Structs
+        [StructLayout(LayoutKind.Sequential)]
+        public class GuidClass {
+            public Guid Value;
+        }
+        #endregion
+
+        #region External functions
+        [DllImport("powrprof.dll")]
+        public static extern UInt32 PowerGetActiveScheme(
+            IntPtr UserRootPowerKey,
+            ref IntPtr ActivePolicyGuid
+        );
+
+        [DllImport("powrprof.dll", CharSet = CharSet.Unicode)]
+        public static extern UInt32 PowerReadACValueIndex(
+            IntPtr RootPowerKey,
+            ref Guid SchemeGuid,
+            ref Guid SubGroupOfPowerSettingsGuid,
+            ref Guid PowerSettingGuid,
+            ref UInt32 AcValueIndex
+        );
+
+        [DllImport("powrprof.dll", CharSet = CharSet.Unicode)]
+        public static extern UInt32 PowerReadDCValueIndex(
+            IntPtr RootPowerKey, ref Guid SchemeGuid,
+            ref Guid SubGroupOfPowerSettingsGuid,
+            ref Guid PowerSettingGuid,
+            ref UInt32 AcValueIndex
+        );
+        #endregion
 
         public Otoin() {
             RetrieveSettings(); //programı yeni başlatıyoruz, ayarları dosyadan alalım
@@ -33,6 +76,7 @@ namespace Otoin {
             notifyIcon.Icon = Properties.Resources.icon;
             aboutVersion.Text = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
 
+            ChangeConsoleLockSetting(true);
             programFiles64 = Environment.ExpandEnvironmentVariables("%ProgramW6432%");
             programFiles32 = Environment.ExpandEnvironmentVariables("%ProgramFiles(x86)%");
 
@@ -88,6 +132,12 @@ namespace Otoin {
 
             stopAction.SelectedIndex = stopActionIndex;
 
+            if (sleepMode) {
+                modeSleep.Checked = true;
+            }
+
+            logicalChange = true;
+
             service = new Timer();
             service.Tick += new EventHandler(Check);
             service.Interval = 20000; // 20 saniyede bir kontrol etsin
@@ -99,7 +149,7 @@ namespace Otoin {
                 // kullanıcı daha önceden "Asla" butonuna basmadı. Asenkron güncelleme kontrolü yapacağız
                 CheckUpdate();
             }
-            
+
         }
 
         /// <summary>
@@ -311,6 +361,11 @@ namespace Otoin {
             isFirstRun = Properties.Settings.Default.isFirstRun;
             stopActionIndex = Properties.Settings.Default.stopAction;
             checkUpdates = Properties.Settings.Default.updateCheck;
+            sleepMode = Properties.Settings.Default.sleepMode;
+            taskEnabled = Properties.Settings.Default.taskEnabled;
+            scheme = GetActiveSchemeGuid();
+            wakeLockEnabled = (GetACValue(scheme, SUB_NONE, CONSOLELOCK) == 1) ? true : false;
+            rtcWakeEnabled = (GetACValue(scheme, SUB_SLEEP, RTCWAKE) == 1) ? true : false;
             if (!isFirstRun) {
                 if (Properties.Settings.Default.targetAppLocs.Length > 0) {
                     string[] tempPaths = Properties.Settings.Default.targetAppLocs.Split(';');
@@ -358,6 +413,8 @@ namespace Otoin {
             Properties.Settings.Default.stopTime = stopTime;
             Properties.Settings.Default.stopAction = stopActionIndex;
             Properties.Settings.Default.updateCheck = checkUpdates;
+            Properties.Settings.Default.sleepMode = sleepMode;
+            Properties.Settings.Default.taskEnabled = taskEnabled;
             Properties.Settings.Default.Save();
         }
 
@@ -373,7 +430,12 @@ namespace Otoin {
             actionButton.Text = "Durdur";
             actionButton.BackColor = Color.FromArgb(255, 168, 35, 35);
             EnableButton(hideButton);
+            if (sleepMode) {
+                EnableButton(sleepButton);
+                CreateTask();
+            }
             Log("Servis başarılı bir şekilde başlatıldı.", "success", true);
+
         }
 
         private void rightClickMenu_ItemClicked(object sender, ToolStripItemClickedEventArgs e) {
@@ -402,6 +464,10 @@ namespace Otoin {
             }
         }
 
+        private void sleepButton_Click(object sender, EventArgs e) {
+
+            //System.Windows.Forms.Application.SetSuspendState(PowerState.Suspend, true, true);
+        }
 
         /// <summary>
         /// Saat kontrolü servisini durdurur.
@@ -409,6 +475,14 @@ namespace Otoin {
         private void StopService() {
             service.Stop();
             isServiceStarted = false;
+
+            if (sleepMode) {
+                DisableButton(sleepButton);
+                using (TaskService ts = new TaskService()) {
+                    ts.RootFolder.DeleteTask("Otoin Uyandırma");
+                }
+            }
+
             actionButton.Text = "Başlat!";
             actionButton.BackColor = Color.FromArgb(255, 35, 91, 168);
             DisableButton(hideButton);
@@ -487,6 +561,37 @@ namespace Otoin {
             return true;
         }
 
+        private void modeSleep_CheckedChanged(object sender) {
+            FlatUI.FlatRadioButton sleep = (FlatUI.FlatRadioButton)sender;
+            if (!logicalChange) {
+                if (sleep.Checked) {
+                    var confirmResult = MessageBox.Show("Uyku modunda; bilgisayarınız belirlediğiniz saatden 1 dakika"
+                        + " önce uyku modundan uyandırılır, programlar belirlediğiniz saatde açılır."
+                        + " Bu özelliği kullanabilmek için bilgisayar uyandıktan sonra şifre sormayı"
+                        + " kaldıracağız. Onaylıyor musunuz?",
+                            "Bilgilendirme",
+                            MessageBoxButtons.OKCancel);
+                    if (confirmResult == DialogResult.OK) {
+                        ChangeConsoleLockSetting(false);
+                        bool enabled = (GetACValue(scheme, SUB_NONE, CONSOLELOCK) == 1) ? true : false;
+                    }
+                    else {
+                        logicalChange = true;
+                        modeNormal.Checked = true;
+                    }
+                }
+                else {
+                    ChangeConsoleLockSetting(true);
+                }
+            }
+
+            if (logicalChange) {
+                logicalChange = false;
+            }
+
+            sleepMode = sleep.Checked;
+        }
+
         /// <summary>
         /// Kullanıcın girdiği program dosya konumlarını doğrular
         /// </summary>
@@ -561,12 +666,12 @@ namespace Otoin {
                         Log(checkCount + ". kontrolde " + i + " program sonlandırıldı. Kapanış eylemi uygulanıyor...", "success", true);
                         isProcStarted = false;
                         DoStopAction();
-                        
+
                     }
                     catch (Exception ex) {
                         Log(ex.Message, "error", true);
                     }
-                   
+
                 }
                 else {
                     Log(checkCount + ". kontrol yapıldı", "info", false);
@@ -610,7 +715,7 @@ namespace Otoin {
         /// Github'daki Release kısmındaki son sürümden kontrol eder.
         /// </summary>
         private async void CheckUpdate() {
-            await Task.Delay(1000);
+            await System.Threading.Tasks.Task.Delay(1000);
 
             if (!CheckInternetConnection()) {
                 Log("İnternet bağlantınız olmadığından güncelleme kontrol edilemedi :(", "error", true);
@@ -695,5 +800,94 @@ namespace Otoin {
             //selectedIndex == 0 ise hiçbir şey yapmayacağız
         }
 
+        /// <summary>
+        /// Aktif güç planının GUID'ini bulur
+        /// </summary>
+        private Guid GetActiveSchemeGuid() {
+            IntPtr activeSchemePtr = IntPtr.Zero;
+            uint res = PowerGetActiveScheme(IntPtr.Zero, ref activeSchemePtr);
+            GuidClass temp = new GuidClass();
+            Marshal.PtrToStructure(activeSchemePtr, temp);
+            Guid scheme = temp.Value;
+            return scheme;
+        }
+
+        /// <summary>
+        /// Bilgisayar fişe takılıyken GUID'i verilen ayarın değerini bulur
+        /// </summary>
+        private UInt32 GetACValue(Guid scheme, Guid subgroup, Guid setting) {
+            UInt32 value = 0;
+            PowerReadACValueIndex(IntPtr.Zero, ref scheme, ref subgroup, ref setting, ref value);
+            return value;
+        }
+
+        /// <summary>
+        /// Bilgisayar pildeyken GUID'i verilen ayarın değerini bulur
+        /// </summary>
+        private UInt32 GetDCValue(Guid scheme, Guid subgroup, Guid setting) {
+            UInt32 value = 0;
+            PowerReadDCValueIndex(IntPtr.Zero, ref scheme, ref subgroup, ref setting, ref value);
+            return value;
+        }
+
+        /// <summary>
+        /// Bilgisiyar uyandıktan sonra şifre istenmesi ayarını değiştirir
+        /// </summary>
+        /// <param name="enabled">Şifre ekranının gösterilip gösterilmeyeceğidir</param>
+        private void ChangeConsoleLockSetting(bool enabled) {
+            string state = (enabled) ? "1" : "0";
+            var powercfgAC = new ProcessStartInfo("powercfg");
+            powercfgAC.Arguments = "-SETACVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK " + state;
+            powercfgAC.CreateNoWindow = true;
+            powercfgAC.UseShellExecute = false;
+            Process.Start(powercfgAC);
+            var powercfgDC = new ProcessStartInfo("powercfg");
+            powercfgDC.Arguments = "-SETDCVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK " + state;
+            powercfgDC.CreateNoWindow = true;
+            powercfgDC.UseShellExecute = false;
+            Process.Start(powercfgDC);
+            wakeLockEnabled = enabled;
+
+        }
+
+        /// <summary>
+        /// Bilgisayarı uyandırmak için zamanlanmış görev oluşturur
+        /// </summary>
+        private void CreateTask() {
+            using (TaskService ts = new TaskService()) {
+
+                // yeni bir zamanlanmış görev oluşturalım
+                TaskDefinition td = ts.NewTask();
+                td.RegistrationInfo.Description = "Bilgisayarınızı belirlediğiniz saatde indirme yapması için uyandırır.";
+
+                DateTime wakeTime = startTime.AddMinutes(-1);
+
+                // Başlatma saatinde bir defa çalışacak bir tetikleyici ayarlayalım
+                td.Triggers.Add(new TimeTrigger(wakeTime));
+                //td.Triggers.Add(new DailyTrigger { DaysInterval = 1, StartBoundary = wakeTime });
+
+                //diğer ayarları yapalım
+                td.Settings.WakeToRun = true;
+                if (ts.HighestSupportedVersion.Major >= 2) {
+                    td.Settings.RunOnlyIfLoggedOn = false;
+                    td.Principal.LogonType = TaskLogonType.None;
+                }
+
+                td.Settings.DisallowStartIfOnBatteries = false;
+                td.Settings.StopIfGoingOnBatteries = false;
+                td.Settings.Priority = ProcessPriorityClass.High; //UAC izni gerekiyor
+                td.Principal.RunLevel = TaskRunLevel.Highest;
+                //td.Settings.RunOnlyIfNetworkAvailable = true;
+
+                // aslında hiçbir şey yapmayan bir işlem tanımlayalım
+                td.Actions.Add(new ExecAction("ping", "-n 1 127.0.0.1 > nul", null));
+
+                // Ana dizine görevimizi kaydedelim
+                ts.RootFolder.RegisterTaskDefinition(@"Otoin Uyandırma", td);
+
+                // Kaydettiğimiz görevi silelim
+                //ts.RootFolder.DeleteTask("Otoin Uyandırma");
+            }
+        }
     }
 }

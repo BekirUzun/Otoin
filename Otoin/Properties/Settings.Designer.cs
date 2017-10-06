@@ -94,5 +94,29 @@ namespace Otoin.Properties {
                 this["updateCheck"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool taskEnabled {
+            get {
+                return ((bool)(this["taskEnabled"]));
+            }
+            set {
+                this["taskEnabled"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool sleepMode {
+            get {
+                return ((bool)(this["sleepMode"]));
+            }
+            set {
+                this["sleepMode"] = value;
+            }
+        }
     }
 }
