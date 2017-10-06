@@ -460,19 +460,28 @@ namespace Otoin {
                 return false;
             }
             string[] temp_start = startTB.Text.Split(':');
-            if (int.Parse(temp_start[0]) >= 24 || int.Parse(temp_start[1]) >= 60) {
+            int startHour = int.Parse(temp_start[0]);
+            int startMinute = int.Parse(temp_start[1]);
+            if (startHour >= 24 || startMinute >= 60) {
                 //saat 23'den dakika 59'dan büyük olamaz
                 Log("O saatde indirmeler zaten açık olur...", "error", false);
                 return false;
             }
             string[] temp_stop = stopTB.Text.Split(':');
-            if (int.Parse(temp_stop[0]) >= 24 || int.Parse(temp_stop[1]) >= 60) {
+            int stopHour = int.Parse(temp_stop[0]);
+            int stopMinute = int.Parse(temp_stop[1]);
+            if (stopHour >= 24 || stopMinute >= 60) {
                 //saat 23'den dakika 59'dan büyük olamaz
                 Log("O saatde bilgisayar zaten kapalı olur...", "error", false);
                 return false;
             }
-            startTime = new DateTime(1970, 1, 1, int.Parse(temp_start[0]), int.Parse(temp_start[1]), 0);
-            stopTime = new DateTime(1970, 1, 1, int.Parse(temp_stop[0]), int.Parse(temp_stop[1]), 0);
+            DateTime n = DateTime.Now;
+            if(n.Hour > startHour || (n.Hour == startHour && n.Minute > startMinute) ) {
+                //eğer şimdiki zaman açılış saatinden ilerideyse, günü yarına alalım
+                n = n.AddDays(1);
+            }
+            startTime = new DateTime(n.Year, n.Month, n.Day, startHour, startMinute, 0);
+            stopTime = new DateTime(1970, 1, 1, stopHour, stopMinute, 0);
 
             isHourChanged = false; // değişim onaylandı, bir sonraki değişimi yakalamak için eski haline döndürelim
             return true;
