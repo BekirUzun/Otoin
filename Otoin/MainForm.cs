@@ -66,6 +66,24 @@ namespace Otoin {
             ref Guid PowerSettingGuid,
             ref UInt32 AcValueIndex
         );
+
+        [DllImport("powrprof.dll", CharSet = CharSet.Unicode)]
+        public static extern UInt32 PowerWriteACValueIndex(
+            IntPtr RootPowerKey,
+            ref Guid SchemeGuid,
+            ref Guid SubGroupOfPowerSettingsGuid,
+            ref Guid PowerSettingGuid,
+            UInt32 AcValueIndex
+        );
+
+        [DllImport("powrprof.dll", CharSet = CharSet.Unicode)]
+        public static extern UInt32 PowerWriteDCValueIndex(
+            IntPtr RootPowerKey,
+            ref Guid SchemeGuid,
+            ref Guid SubGroupOfPowerSettingsGuid,
+            ref Guid PowerSettingGuid,
+            UInt32 DcValueIndex
+        );
         #endregion
 
         public Otoin() {
@@ -572,7 +590,8 @@ namespace Otoin {
                             "Bilgilendirme",
                             MessageBoxButtons.OKCancel);
                     if (confirmResult == DialogResult.OK) {
-                        ChangeConsoleLockSetting(false);
+                        SetRtcWakeSetting(true); //uykudan uyandırabilmeyi etkinleştirelim
+                        SetConsoleLockSetting(false);//uykudan uyunanınca şifre sormasın
                         bool enabled = (GetACValue(scheme, SUB_NONE, CONSOLELOCK) == 1) ? true : false;
                     }
                     else {
@@ -581,7 +600,8 @@ namespace Otoin {
                     }
                 }
                 else {
-                    ChangeConsoleLockSetting(true);
+                    SetRtcWakeSetting(false); // uykudan uyandırabilmeyi eski haline çevirelim
+                    SetConsoleLockSetting(true);
                 }
             }
             else {
@@ -726,7 +746,6 @@ namespace Otoin {
             int latestVersion = Int16.Parse(latestRelease.TagName.Remove(4, 1).Remove(2, 1).Remove(0, 1));
             var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             int currentVersion = v.Major * 100 + v.Minor * 10 + v.Build;
-
             if (latestVersion > currentVersion) {
                 blur.Image = Properties.Resources.blur;
                 blur.BackColor = Color.Transparent;
@@ -829,11 +848,19 @@ namespace Otoin {
             return value;
         }
 
+        private UInt32 SetACValue(Guid scheme, Guid subgroup, Guid setting, UInt32 value) {
+            return PowerWriteACValueIndex(IntPtr.Zero, ref scheme, ref subgroup, ref setting, value);
+        }
+
+        private UInt32 SetDCValue(Guid scheme, Guid subgroup, Guid setting, UInt32 value) {
+            return PowerWriteDCValueIndex(IntPtr.Zero, ref scheme, ref subgroup, ref setting, value);
+        }
+
         /// <summary>
         /// Bilgisiyar uyandıktan sonra şifre istenmesi ayarını değiştirir
         /// </summary>
         /// <param name="enabled">Şifre ekranının gösterilip gösterilmeyeceğidir</param>
-        private void ChangeConsoleLockSetting(bool enabled) {
+        private void SetConsoleLockSetting(bool enabled) {
             string state = (enabled) ? "1" : "0";
             var powercfgAC = new ProcessStartInfo("powercfg");
             powercfgAC.Arguments = "-SETACVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK " + state;
@@ -847,6 +874,20 @@ namespace Otoin {
             Process.Start(powercfgDC);
             wakeLockEnabled = enabled;
 
+        }
+
+        /// <summary>
+        /// Bilgisayarın uykudan uyandırılabilme ayarını değiştirir
+        /// </summary>
+        /// <param name="enabled">Ayarın açık mı kapalımı olduğunu belirtir</param>
+        private void SetRtcWakeSetting(bool enabled) {
+            // 0:devre dışı 1: etkin, 2: sadece önemli olanlar
+            // enabled == true ise AC ve DC için aktifleştirelim
+            // false ise eski haline çevirelim
+            UInt32 acValue = (UInt32)((enabled) ? 1 : 2);
+            UInt32 dcValue = (UInt32)((enabled) ? 1 : 0);
+            SetACValue(scheme, SUB_SLEEP, RTCWAKE, acValue);
+            SetDCValue(scheme, SUB_SLEEP, RTCWAKE, dcValue);
         }
 
         /// <summary>
@@ -891,7 +932,9 @@ namespace Otoin {
 
         private void DeleteTask() {
             using (TaskService ts = new TaskService()) {
-                ts.RootFolder.DeleteTask("Otoin Uyandırma");
+                if (ts.RootFolder.Tasks.Exists("Otoin Uyandırma")) {
+                    ts.RootFolder.DeleteTask("Otoin Uyandırma");
+                }
             }
         }
     }
