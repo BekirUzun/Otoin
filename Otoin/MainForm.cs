@@ -16,8 +16,9 @@ namespace Otoin {
         List<string> programPaths;
         List<Process> processes;
         List<PerformanceCounter> networksPC;
-        bool isTested, isFirstRun , isTestMode, isProcStarted, isServiceStarted, isHourChanged, isManualDelete;
-        bool checkUpdates;
+        bool isFirstRun, isProcStarted, isServiceStarted;
+        bool isHourChanged, isManualDelete, sleepMode, taskEnabled, wakeLockEnabled, rtcWakeEnabled;
+        bool logicalChange, checkUpdates;
         DateTime startTime, stopTime;
         Timer service;
         int checkCount, totalUsage, noNetActivityCount, stopActionIndex;
@@ -65,7 +66,6 @@ namespace Otoin {
                         programsList.Rows.Add(Path.GetFileName(programPath), programPath);
                     }
                     EnableButton(actionButton);
-                    EnableButton(testButton);
                 }
 
             }
@@ -94,7 +94,6 @@ namespace Otoin {
 
             processes = new List<Process>();
             isManualDelete = true; // kullanıcının el ile sildiği programlar için
-            isTestMode = false; //programın çalışma şeklini tutmak için
 
             if (checkUpdates) {
                 // kullanıcı daha önceden "Asla" butonuna basmadı. Asenkron güncelleme kontrolü yapacağız
@@ -158,7 +157,6 @@ namespace Otoin {
             if (foundPrograms > 0) {
                 Log(foundPrograms + " program bulundu.", "success", false);
                 EnableButton(actionButton); //kapalı olan butonları aktifleştirelim
-                EnableButton(testButton);
                 SaveSettings();
             } else {
                 Log("Herhangi bir program bulunamadı. Manuel ekleyiniz.", "error", false);
@@ -177,10 +175,8 @@ namespace Otoin {
             programPaths.Add(programPrompt.FileName);
             programsList.Rows.Add(programPrompt.SafeFileName, programPrompt.FileName);
 
-            isTested = false;
             Log("Program başarılı bir şekilde seçildi!", "success", false);
             EnableButton(actionButton); //kapalı olan butonları aktifleştirelim
-            EnableButton(testButton);
             SaveSettings();
         }
 
@@ -198,26 +194,9 @@ namespace Otoin {
 
             if(programPaths.Count == 0) {
                 DisableButton(actionButton);
-                DisableButton(testButton);
             }
 
             SaveSettings();
-        }
-
-        private void testButton_Click(object sender, EventArgs e) {
-            var confirmResult = MessageBox.Show("Seçtiğiniz programlar bir dakika sonra açılacak ve bir dakika açık kalacak. " +
-                        "Daha sonra seçtiğiniz kapanış eylemi gerçekleştirilecek. "+
-                        "Kaydetmediğiniz çalışmalarınız varsa lütfen kaydedin. " +
-                        "\nOnaylıyor musunuz?",
-                        "Onayla",
-                        MessageBoxButtons.OKCancel);
-            if (confirmResult == DialogResult.OK) {
-                if (isServiceStarted)
-                    StopService();
-
-                SaveSettings();
-                TestService();
-            }
         }
 
         private void hideButton_Click(object sender, EventArgs e) {
@@ -234,20 +213,7 @@ namespace Otoin {
                 StopService();
                 return;
             }
-
-            if (isTested) {
-                StartService();
-            }
-            else {
-                var confirmResult = MessageBox.Show("Programı henüz test etmediniz. " +
-                     "Programın çalıştığını doğrulamanız için test etmenizi öneririm :)" +
-                     "\nServis yine de başlatılsın mı?",
-                     "Programı test etmediniz",
-                     MessageBoxButtons.YesNo);
-                if (confirmResult == DialogResult.Yes) {
-                    StartService();
-                }
-            }
+            StartService();
         }
 
         /// <summary>
@@ -338,7 +304,6 @@ namespace Otoin {
         /// </summary>
         private void RetrieveSettings() {
             programPaths = new List<string>();
-            isTested = Properties.Settings.Default.isTested;
             startTime = Properties.Settings.Default.startTime;
             stopTime = Properties.Settings.Default.stopTime;
             isFirstRun = Properties.Settings.Default.isFirstRun;
@@ -384,7 +349,6 @@ namespace Otoin {
             }
             ValidateTimeInputs();
 
-            Properties.Settings.Default.isTested = isTested;
             Properties.Settings.Default.isFirstRun = isFirstRun;
             Properties.Settings.Default.startTime = startTime;
             Properties.Settings.Default.stopTime = stopTime;
@@ -395,7 +359,7 @@ namespace Otoin {
 
         /// <summary>
         /// Saat kontrolü servisini başlatır. İsim yanıltmasın herhangi bir gerçek servis kullanmaz.
-        /// 'Başlat' ve 'Test Et' butonu ile çağırılır.
+        /// 'Başlat' butonu ile çağırılır.
         /// </summary>
         private void StartService() {
             service.Start();
@@ -404,7 +368,6 @@ namespace Otoin {
             actionButton.Text = "Durdur";
             actionButton.BackColor = Color.FromArgb(255, 168, 35, 35);
             EnableButton(hideButton);
-            DisableButton(testButton);
             Log("Servis başarılı bir şekilde başlatıldı.", "success", true);
         }
 
@@ -444,7 +407,6 @@ namespace Otoin {
             actionButton.Text = "Başlat!";
             actionButton.BackColor = Color.FromArgb(255, 35, 91, 168);
             DisableButton(hideButton);
-            EnableButton(testButton);
             float usageDisplay;
             string usageUnit;
             if (totalUsage > 1024 && totalUsage < 1024*1024) {
@@ -463,27 +425,6 @@ namespace Otoin {
                 usageUnit = " KB";
             }
             Log("Servis durduruldu. Yapılan toplam indirme " + usageDisplay.ToString("0.00") + usageUnit, "success", true);
-        }
-
-        /// <summary>
-        /// Verilen ayarların doğru çalışıp çalışmadığını kullanıcıya göstermek için yazılmıştır. 
-        /// Başlangıç saatini şu andan 1 dakika sonraya, kapanış saatini 2 dakika sonraya ayarlar.
-        /// </summary>
-        private void TestService() {
-            isTestMode = true;
-            
-            DisableButton(testButton);
-            DisableButton(actionButton);
-
-            startTime = DateTime.Now.AddMinutes(1); // başlangıcı 1 dakika sonraya ayarlayalım
-            stopTime = DateTime.Now.AddMinutes(2); // bitişi 2 dakika sonraya
-            isHourChanged = true;
-
-            checkCount = 0;
-            isServiceStarted = true;
-            service.Interval = 5000; //işe yarar bir şey yapıyormuş gibi kontrol hızını arttıralım
-            service.Start(); // kontrolü başlatalım
-            Log("Test başarılı bir şekilde başlatıldı.", "success", true);
         }
 
         /// <summary>
@@ -604,16 +545,6 @@ namespace Otoin {
                         StopService();
                         Log(checkCount + ". kontrolde " + i + " program sonlandırıldı. Kapanış eylemi uygulanıyor...", "success", true);
                         isProcStarted = false;
-                        
-                        if (isTestMode) {
-                            isTested = true;
-                            Properties.Settings.Default.isTested = true;
-                            Properties.Settings.Default.Save();
-                            ValidateTimeInputs();
-                            EnableButton(testButton);
-                            EnableButton(actionButton);
-                        }
-
                         DoStopAction();
                         
                     }

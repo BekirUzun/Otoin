@@ -42,7 +42,6 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.startTB = new System.Windows.Forms.TextBox();
             this.helpSettings = new System.Windows.Forms.Button();
-            this.testButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.stopTB = new System.Windows.Forms.TextBox();
             this.hideButton = new System.Windows.Forms.Button();
@@ -157,7 +156,6 @@
             this.settingsTab.Controls.Add(this.actionButton);
             this.settingsTab.Controls.Add(this.panel2);
             this.settingsTab.Controls.Add(this.helpSettings);
-            this.settingsTab.Controls.Add(this.testButton);
             this.settingsTab.Controls.Add(this.panel1);
             this.settingsTab.Controls.Add(this.hideButton);
             this.settingsTab.Controls.Add(this.startLabel);
@@ -304,23 +302,6 @@
             this.helpSettings.UseVisualStyleBackColor = false;
             this.helpSettings.Click += new System.EventHandler(this.helpSettings_Click);
             // 
-            // testButton
-            // 
-            this.testButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(60)))), ((int)(((byte)(60)))));
-            this.testButton.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.testButton.Enabled = false;
-            this.testButton.FlatAppearance.BorderColor = System.Drawing.Color.Black;
-            this.testButton.FlatAppearance.BorderSize = 0;
-            this.testButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.testButton.ForeColor = System.Drawing.Color.White;
-            this.testButton.Location = new System.Drawing.Point(139, 176);
-            this.testButton.Name = "testButton";
-            this.testButton.Size = new System.Drawing.Size(106, 32);
-            this.testButton.TabIndex = 11;
-            this.testButton.Text = "Test Et";
-            this.testButton.UseVisualStyleBackColor = false;
-            this.testButton.Click += new System.EventHandler(this.testButton_Click);
-            // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(47)))), ((int)(((byte)(49)))));
@@ -356,7 +337,7 @@
             this.hideButton.FlatAppearance.BorderSize = 0;
             this.hideButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.hideButton.ForeColor = System.Drawing.Color.White;
-            this.hideButton.Location = new System.Drawing.Point(251, 176);
+            this.hideButton.Location = new System.Drawing.Point(203, 176);
             this.hideButton.Name = "hideButton";
             this.hideButton.Size = new System.Drawing.Size(106, 32);
             this.hideButton.TabIndex = 11;
@@ -911,7 +892,6 @@
         private System.Windows.Forms.Button actionButton;
         private System.Windows.Forms.OpenFileDialog programPrompt;
         private System.Windows.Forms.Button hideButton;
-        private System.Windows.Forms.Button testButton;
         private System.Windows.Forms.Button filePromptButton;
         private System.Windows.Forms.TextBox stopTB;
         private System.Windows.Forms.Panel panel1;
