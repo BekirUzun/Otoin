@@ -486,7 +486,7 @@ namespace Otoin {
 
         private void sleepButton_Click(object sender, EventArgs e) {
             //bilgisayarı uyku moduna alalım
-            System.Windows.Forms.Application.SetSuspendState(PowerState.Suspend, true, true);
+            System.Windows.Forms.Application.SetSuspendState(PowerState.Suspend, false, false);
         }
 
         /// <summary>
