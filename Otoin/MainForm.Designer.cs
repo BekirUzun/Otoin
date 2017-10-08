@@ -199,7 +199,7 @@
             this.modeSleep.Checked = false;
             this.modeSleep.Cursor = System.Windows.Forms.Cursors.Default;
             this.modeSleep.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.modeSleep.ForeColor = System.Drawing.SystemColors.ControlLight;
+            this.modeSleep.ForeColor = System.Drawing.Color.White;
             this.modeSleep.Location = new System.Drawing.Point(215, 37);
             this.modeSleep.Name = "modeSleep";
             this.modeSleep.Options = FlatUI.FlatRadioButton._Options.Style1;

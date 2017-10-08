@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Octokit;
 using Microsoft.Win32.TaskScheduler;
 using System.Runtime.InteropServices;
+using System.Linq;
 
 namespace Otoin {
     public partial class Otoin : Form {
@@ -21,7 +22,7 @@ namespace Otoin {
         List<PerformanceCounter> networksPC;
         bool isFirstRun, isProcStarted, isServiceStarted;
         bool isHourChanged, isManualDelete, sleepMode, taskEnabled, wakeLockEnabled, rtcWakeEnabled;
-        bool logicalChange, checkUpdates;
+        bool logicalChange, allowSleep, checkUpdates;
         DateTime startTime, stopTime;
         Timer service;
         int checkCount, totalUsage, noNetActivityCount, stopActionIndex;
@@ -66,7 +67,9 @@ namespace Otoin {
             ref Guid PowerSettingGuid,
             ref UInt32 AcValueIndex
         );
-
+        /// <summary>
+        /// [KULLANIMDAN KALDIRILDI]
+        /// </summary>
         [DllImport("powrprof.dll", CharSet = CharSet.Unicode)]
         public static extern UInt32 PowerWriteACValueIndex(
             IntPtr RootPowerKey,
@@ -76,6 +79,9 @@ namespace Otoin {
             UInt32 AcValueIndex
         );
 
+        /// <summary>
+        /// [KULLANIMDAN KALDIRILDI]
+        /// </summary>
         [DllImport("powrprof.dll", CharSet = CharSet.Unicode)]
         public static extern UInt32 PowerWriteDCValueIndex(
             IntPtr RootPowerKey,
@@ -149,7 +155,21 @@ namespace Otoin {
 
             stopAction.SelectedIndex = stopActionIndex;
 
-            if (sleepMode) {
+            bool consoleLockAC = (GetACValue(scheme, SUB_NONE, CONSOLELOCK) == 1) ? true : false;
+            bool consoleLockDC = (GetDCValue(scheme, SUB_NONE, CONSOLELOCK) == 1) ? true : false;
+            bool rtcWakeAC = (GetACValue(scheme, SUB_SLEEP, RTCWAKE) == 1) ? true : false;
+            bool rtcWakeDC = (GetDCValue(scheme, SUB_SLEEP, RTCWAKE) == 1) ? true : false;
+
+            if(consoleLockAC || consoleLockDC || !rtcWakeAC) {
+                allowSleep = false;
+                modeSleep.Enabled = false;
+                modeSleep.Font = new Font("Segoe UI", 10F, FontStyle.Strikeout);
+            } 
+            else {
+                allowSleep = true;
+            }
+
+            if (sleepMode && allowSleep) {
                 logicalChange = true;
                 modeSleep.Checked = true;
             } else {
@@ -582,27 +602,32 @@ namespace Otoin {
         private void modeSleep_CheckedChanged(object sender) {
             FlatUI.FlatRadioButton sleep = (FlatUI.FlatRadioButton)sender;
             if (!logicalChange) {
+                if (!allowSleep) {
+                    logicalChange = true;
+                    modeNormal.Checked = true;
+                    return;
+                }
+
                 if (sleep.Checked) {
                     var confirmResult = MessageBox.Show("Uyku modunda; bilgisayarınız belirlediğiniz saatden 1 dakika"
                         + " önce uyku modundan uyandırılır, programlar belirlediğiniz saatde açılır."
-                        + " Bu özelliği kullanabilmek için bilgisayar uyandıktan sonra şifre sormayı"
-                        + " kaldıracağız. Onaylıyor musunuz?",
+                        + " Onaylıyor musunuz?",
                             "Bilgilendirme",
                             MessageBoxButtons.OKCancel);
                     if (confirmResult == DialogResult.OK) {
-                        SetRtcWakeSetting(true); //uykudan uyandırabilmeyi etkinleştirelim
-                        SetConsoleLockSetting(false);//uykudan uyunanınca şifre sormasın
-                        bool enabled = (GetACValue(scheme, SUB_NONE, CONSOLELOCK) == 1) ? true : false;
+                        //SetRtcWakeSetting(true); //uykudan uyandırabilmeyi etkinleştirelim
+                        //SetConsoleLockSetting(false);//uykudan uyunanınca şifre sormasın
+                        sleepMode = true;
                     }
                     else {
                         logicalChange = true;
                         modeNormal.Checked = true;
                     }
                 }
-                else {
-                    SetRtcWakeSetting(false); // uykudan uyandırabilmeyi eski haline çevirelim
-                    SetConsoleLockSetting(true);
-                }
+                //else {
+                //    SetRtcWakeSetting(false); // uykudan uyandırabilmeyi eski haline çevirelim
+                //    SetConsoleLockSetting(true);
+                //}
             }
             else {
                 logicalChange = false;
@@ -645,6 +670,17 @@ namespace Otoin {
         private void DisableButton(Button targetButton) {
             targetButton.Enabled = false;
             targetButton.BackColor = Color.FromArgb(255, 60, 60, 60);
+        }
+
+        private void sleepDisabled_Click(object sender, EventArgs e) {
+            if (help == null) {
+                //daha önceden yardım formunu oluşturmamışız
+                help = new HelpForm();
+                help.Show();
+            }
+            help.SelectTab(2);
+            help.Show();
+            help.Focus();
         }
 
         /// <summary>
@@ -848,30 +884,25 @@ namespace Otoin {
             return value;
         }
 
+        /// <summary>
+        /// [KULLANIMDAN KALDIRILDI] Bilgisayar fişe takılıyken GUID'i verilen ayarı değişirir
+        /// </summary>
         private UInt32 SetACValue(Guid scheme, Guid subgroup, Guid setting, UInt32 value) {
             return PowerWriteACValueIndex(IntPtr.Zero, ref scheme, ref subgroup, ref setting, value);
         }
 
+        /// <summary>
+        /// [KULLANIMDAN KALDIRILDI] Bilgisayar pildeyken GUID'i verilen ayarın değerini değiştirir
+        /// </summary>
         private UInt32 SetDCValue(Guid scheme, Guid subgroup, Guid setting, UInt32 value) {
             return PowerWriteDCValueIndex(IntPtr.Zero, ref scheme, ref subgroup, ref setting, value);
         }
 
         /// <summary>
-        /// Bilgisiyar uyandıktan sonra şifre istenmesi ayarını değiştirir
+        /// [KULLANIMDAN KALDIRILDI] Bilgisiyar uyandıktan sonra şifre istenmesi ayarını değiştirir
         /// </summary>
         /// <param name="enabled">Şifre ekranının gösterilip gösterilmeyeceğidir</param>
         private void SetConsoleLockSetting(bool enabled) {
-            string state = (enabled) ? "1" : "0";
-            var powercfgAC = new ProcessStartInfo("powercfg");
-            powercfgAC.Arguments = "-SETACVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK " + state;
-            powercfgAC.CreateNoWindow = true;
-            powercfgAC.UseShellExecute = false;
-            Process.Start(powercfgAC);
-            var powercfgDC = new ProcessStartInfo("powercfg");
-            powercfgDC.Arguments = "-SETDCVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK " + state;
-            powercfgDC.CreateNoWindow = true;
-            powercfgDC.UseShellExecute = false;
-            Process.Start(powercfgDC);
             UInt32 value = (UInt32)((enabled) ? 1 : 0);
             SetACValue(scheme, SUB_NONE, CONSOLELOCK, value);
             SetDCValue(scheme, SUB_NONE, CONSOLELOCK, value);
@@ -880,7 +911,7 @@ namespace Otoin {
         }
 
         /// <summary>
-        /// Bilgisayarın uykudan uyandırılabilme ayarını değiştirir
+        /// [KULLANIMDAN KALDIRILDI] Bilgisayarın uykudan uyandırılabilme ayarını değiştirir
         /// </summary>
         /// <param name="enabled">Ayarın açık mı kapalımı olduğunu belirtir</param>
         private void SetRtcWakeSetting(bool enabled) {

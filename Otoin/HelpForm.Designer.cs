@@ -43,10 +43,16 @@
             this.closeBtn = new System.Windows.Forms.Button();
             this.close = new FlatUI.FlatClose();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.sleepModeTab = new System.Windows.Forms.TabPage();
+            this.flatLabel12 = new FlatUI.FlatLabel();
+            this.flatLabel13 = new FlatUI.FlatLabel();
+            this.flatLabel14 = new FlatUI.FlatLabel();
+            this.flatLabel15 = new FlatUI.FlatLabel();
             this.helpFormSkin.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.settingsTab.SuspendLayout();
             this.programsTab.SuspendLayout();
+            this.sleepModeTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // helpFormSkin
@@ -85,6 +91,7 @@
             this.tabControl.BaseColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(47)))), ((int)(((byte)(49)))));
             this.tabControl.Controls.Add(this.settingsTab);
             this.tabControl.Controls.Add(this.programsTab);
+            this.tabControl.Controls.Add(this.sleepModeTab);
             this.tabControl.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.tabControl.ItemSize = new System.Drawing.Size(167, 40);
             this.tabControl.Location = new System.Drawing.Point(8, 53);
@@ -118,7 +125,7 @@
             this.flatLabel5.BackColor = System.Drawing.Color.Transparent;
             this.flatLabel5.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.flatLabel5.ForeColor = System.Drawing.Color.White;
-            this.flatLabel5.Location = new System.Drawing.Point(23, 453);
+            this.flatLabel5.Location = new System.Drawing.Point(20, 453);
             this.flatLabel5.Name = "flatLabel5";
             this.flatLabel5.Size = new System.Drawing.Size(114, 17);
             this.flatLabel5.TabIndex = 14;
@@ -130,7 +137,7 @@
             this.flatLabel4.BackColor = System.Drawing.Color.Transparent;
             this.flatLabel4.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.flatLabel4.ForeColor = System.Drawing.Color.White;
-            this.flatLabel4.Location = new System.Drawing.Point(23, 385);
+            this.flatLabel4.Location = new System.Drawing.Point(20, 385);
             this.flatLabel4.Name = "flatLabel4";
             this.flatLabel4.Size = new System.Drawing.Size(106, 17);
             this.flatLabel4.TabIndex = 14;
@@ -142,7 +149,7 @@
             this.flatLabel3.BackColor = System.Drawing.Color.Transparent;
             this.flatLabel3.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.flatLabel3.ForeColor = System.Drawing.Color.White;
-            this.flatLabel3.Location = new System.Drawing.Point(23, 300);
+            this.flatLabel3.Location = new System.Drawing.Point(20, 300);
             this.flatLabel3.Name = "flatLabel3";
             this.flatLabel3.Size = new System.Drawing.Size(118, 17);
             this.flatLabel3.TabIndex = 14;
@@ -154,7 +161,7 @@
             this.flatLabel2.BackColor = System.Drawing.Color.Transparent;
             this.flatLabel2.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.flatLabel2.ForeColor = System.Drawing.Color.White;
-            this.flatLabel2.Location = new System.Drawing.Point(23, 230);
+            this.flatLabel2.Location = new System.Drawing.Point(20, 230);
             this.flatLabel2.Name = "flatLabel2";
             this.flatLabel2.Size = new System.Drawing.Size(98, 17);
             this.flatLabel2.TabIndex = 14;
@@ -166,7 +173,7 @@
             this.flatLabel1.BackColor = System.Drawing.Color.Transparent;
             this.flatLabel1.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.flatLabel1.ForeColor = System.Drawing.Color.White;
-            this.flatLabel1.Location = new System.Drawing.Point(23, 163);
+            this.flatLabel1.Location = new System.Drawing.Point(20, 163);
             this.flatLabel1.Name = "flatLabel1";
             this.flatLabel1.Size = new System.Drawing.Size(83, 17);
             this.flatLabel1.TabIndex = 14;
@@ -178,7 +185,7 @@
             this.flatLabel7.BackColor = System.Drawing.Color.Transparent;
             this.flatLabel7.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.flatLabel7.ForeColor = System.Drawing.Color.White;
-            this.flatLabel7.Location = new System.Drawing.Point(23, 57);
+            this.flatLabel7.Location = new System.Drawing.Point(20, 57);
             this.flatLabel7.Name = "flatLabel7";
             this.flatLabel7.Size = new System.Drawing.Size(104, 17);
             this.flatLabel7.TabIndex = 14;
@@ -217,7 +224,7 @@
             this.flatLabel10.BackColor = System.Drawing.Color.Transparent;
             this.flatLabel10.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.flatLabel10.ForeColor = System.Drawing.Color.White;
-            this.flatLabel10.Location = new System.Drawing.Point(15, 214);
+            this.flatLabel10.Location = new System.Drawing.Point(20, 214);
             this.flatLabel10.Name = "flatLabel10";
             this.flatLabel10.Size = new System.Drawing.Size(158, 17);
             this.flatLabel10.TabIndex = 19;
@@ -229,7 +236,7 @@
             this.flatLabel11.BackColor = System.Drawing.Color.Transparent;
             this.flatLabel11.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.flatLabel11.ForeColor = System.Drawing.Color.White;
-            this.flatLabel11.Location = new System.Drawing.Point(14, 76);
+            this.flatLabel11.Location = new System.Drawing.Point(20, 76);
             this.flatLabel11.Name = "flatLabel11";
             this.flatLabel11.Size = new System.Drawing.Size(163, 17);
             this.flatLabel11.TabIndex = 19;
@@ -241,7 +248,7 @@
             this.flatLabel9.BackColor = System.Drawing.Color.Transparent;
             this.flatLabel9.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.flatLabel9.ForeColor = System.Drawing.Color.White;
-            this.flatLabel9.Location = new System.Drawing.Point(15, 146);
+            this.flatLabel9.Location = new System.Drawing.Point(20, 146);
             this.flatLabel9.Name = "flatLabel9";
             this.flatLabel9.Size = new System.Drawing.Size(159, 17);
             this.flatLabel9.TabIndex = 19;
@@ -297,6 +304,69 @@
             this.panel3.Size = new System.Drawing.Size(525, 325);
             this.panel3.TabIndex = 19;
             // 
+            // sleepModeTab
+            // 
+            this.sleepModeTab.AutoScroll = true;
+            this.sleepModeTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
+            this.sleepModeTab.Controls.Add(this.flatLabel15);
+            this.sleepModeTab.Controls.Add(this.flatLabel14);
+            this.sleepModeTab.Controls.Add(this.flatLabel13);
+            this.sleepModeTab.Controls.Add(this.flatLabel12);
+            this.sleepModeTab.Location = new System.Drawing.Point(4, 44);
+            this.sleepModeTab.Name = "sleepModeTab";
+            this.sleepModeTab.Padding = new System.Windows.Forms.Padding(3);
+            this.sleepModeTab.Size = new System.Drawing.Size(501, 214);
+            this.sleepModeTab.TabIndex = 2;
+            this.sleepModeTab.Text = "Uyku Modu";
+            // 
+            // flatLabel12
+            // 
+            this.flatLabel12.BackColor = System.Drawing.Color.Transparent;
+            this.flatLabel12.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.flatLabel12.ForeColor = System.Drawing.Color.White;
+            this.flatLabel12.Location = new System.Drawing.Point(33, 27);
+            this.flatLabel12.Name = "flatLabel12";
+            this.flatLabel12.Size = new System.Drawing.Size(445, 448);
+            this.flatLabel12.TabIndex = 19;
+            this.flatLabel12.Text = resources.GetString("flatLabel12.Text");
+            this.flatLabel12.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // flatLabel13
+            // 
+            this.flatLabel13.AutoSize = true;
+            this.flatLabel13.BackColor = System.Drawing.Color.Transparent;
+            this.flatLabel13.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.flatLabel13.ForeColor = System.Drawing.Color.White;
+            this.flatLabel13.Location = new System.Drawing.Point(20, 76);
+            this.flatLabel13.Name = "flatLabel13";
+            this.flatLabel13.Size = new System.Drawing.Size(147, 17);
+            this.flatLabel13.TabIndex = 20;
+            this.flatLabel13.Text = "Bu ayar neden kapalı ?";
+            // 
+            // flatLabel14
+            // 
+            this.flatLabel14.AutoSize = true;
+            this.flatLabel14.BackColor = System.Drawing.Color.Transparent;
+            this.flatLabel14.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.flatLabel14.ForeColor = System.Drawing.Color.White;
+            this.flatLabel14.Location = new System.Drawing.Point(20, 163);
+            this.flatLabel14.Name = "flatLabel14";
+            this.flatLabel14.Size = new System.Drawing.Size(294, 17);
+            this.flatLabel14.TabIndex = 21;
+            this.flatLabel14.Text = "A) Uyandırma zamanlayıcılarını etkinleştirme :";
+            // 
+            // flatLabel15
+            // 
+            this.flatLabel15.AutoSize = true;
+            this.flatLabel15.BackColor = System.Drawing.Color.Transparent;
+            this.flatLabel15.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
+            this.flatLabel15.ForeColor = System.Drawing.Color.White;
+            this.flatLabel15.Location = new System.Drawing.Point(20, 331);
+            this.flatLabel15.Name = "flatLabel15";
+            this.flatLabel15.Size = new System.Drawing.Size(285, 17);
+            this.flatLabel15.TabIndex = 22;
+            this.flatLabel15.Text = "B) Uyandıktan sonra şifre istemeyi kapatma :";
+            // 
             // HelpForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -314,6 +384,8 @@
             this.settingsTab.PerformLayout();
             this.programsTab.ResumeLayout(false);
             this.programsTab.PerformLayout();
+            this.sleepModeTab.ResumeLayout(false);
+            this.sleepModeTab.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -339,5 +411,10 @@
         private FlatUI.FlatLabel flatLabel6;
         private FlatUI.FlatLabel flatLabel10;
         private FlatUI.FlatLabel flatLabel11;
+        private System.Windows.Forms.TabPage sleepModeTab;
+        private FlatUI.FlatLabel flatLabel15;
+        private FlatUI.FlatLabel flatLabel14;
+        private FlatUI.FlatLabel flatLabel13;
+        private FlatUI.FlatLabel flatLabel12;
     }
 }
