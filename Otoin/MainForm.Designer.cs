@@ -83,6 +83,7 @@
             this.blur = new System.Windows.Forms.PictureBox();
             this.programPrompt = new System.Windows.Forms.OpenFileDialog();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.sleepDisabled = new FlatUI.FlatLabel();
             this.skin.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.settingsTab.SuspendLayout();
@@ -138,6 +139,7 @@
             // settingsTab
             // 
             this.settingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
+            this.settingsTab.Controls.Add(this.sleepDisabled);
             this.settingsTab.Controls.Add(this.stopAction);
             this.settingsTab.Controls.Add(this.flatLabel8);
             this.settingsTab.Controls.Add(this.modeSleep);
@@ -865,6 +867,21 @@
             this.notifyIcon.Visible = true;
             this.notifyIcon.Click += new System.EventHandler(this.notifyIcon_Click);
             // 
+            // sleepDisabled
+            // 
+            this.sleepDisabled.AutoSize = true;
+            this.sleepDisabled.BackColor = System.Drawing.Color.Transparent;
+            this.sleepDisabled.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.sleepDisabled.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Underline);
+            this.sleepDisabled.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(121)))), ((int)(((byte)(198)))));
+            this.sleepDisabled.Location = new System.Drawing.Point(274, 41);
+            this.sleepDisabled.Name = "sleepDisabled";
+            this.sleepDisabled.Size = new System.Drawing.Size(102, 13);
+            this.sleepDisabled.TabIndex = 19;
+            this.sleepDisabled.Text = "(Bu neden kapalı?)";
+            this.sleepDisabled.Visible = false;
+            this.sleepDisabled.Click += new System.EventHandler(this.sleepDisabled_Click);
+            // 
             // Otoin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -956,6 +973,7 @@
         private FlatUI.FlatContextMenuStrip rightClickMenu;
         private System.Windows.Forms.ToolStripMenuItem silToolStripMenuItem;
         private System.Windows.Forms.Button sleepButton;
+        private FlatUI.FlatLabel sleepDisabled;
     }
 }
 

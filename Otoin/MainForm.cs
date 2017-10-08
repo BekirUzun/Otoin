@@ -164,6 +164,7 @@ namespace Otoin {
                 allowSleep = false;
                 modeSleep.Enabled = false;
                 modeSleep.Font = new Font("Segoe UI", 10F, FontStyle.Strikeout);
+                sleepDisabled.Visible = true;
             } 
             else {
                 allowSleep = true;
