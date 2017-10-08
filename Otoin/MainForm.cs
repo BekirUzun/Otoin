@@ -742,8 +742,8 @@ namespace Otoin {
             }
             var github = new GitHubClient(new ProductHeaderValue("Otoin"));
             var releases = await github.Repository.Release.GetAll("BekirUzun", "Otoin");
-            var latestRelease = releases[0];
-            int latestVersion = Int16.Parse(latestRelease.TagName.Remove(4, 1).Remove(2, 1).Remove(0, 1));
+            string tagName = releases[0].TagName;
+            int latestVersion = Int16.Parse((string.Concat(tagName.Where(char.IsDigit))).Substring(0,3));
             var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
             int currentVersion = v.Major * 100 + v.Minor * 10 + v.Build;
             if (latestVersion > currentVersion) {
@@ -872,6 +872,9 @@ namespace Otoin {
             powercfgDC.CreateNoWindow = true;
             powercfgDC.UseShellExecute = false;
             Process.Start(powercfgDC);
+            UInt32 value = (UInt32)((enabled) ? 1 : 0);
+            SetACValue(scheme, SUB_NONE, CONSOLELOCK, value);
+            SetDCValue(scheme, SUB_NONE, CONSOLELOCK, value);
             wakeLockEnabled = enabled;
 
         }
@@ -930,6 +933,9 @@ namespace Otoin {
             }
         }
 
+        /// <summary>
+        /// Önceden oluşturulmuş görev varsa kaldırır
+        /// </summary>
         private void DeleteTask() {
             using (TaskService ts = new TaskService()) {
                 if (ts.RootFolder.Tasks.Exists("Otoin Uyandırma")) {
