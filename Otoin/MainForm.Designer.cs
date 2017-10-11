@@ -33,7 +33,9 @@
             this.tabControl = new FlatUI.FlatTabControl();
             this.settingsTab = new System.Windows.Forms.TabPage();
             this.noNetToggle = new FlatUI.FlatToggle();
+            this.sleepDisabled = new FlatUI.FlatLabel();
             this.stopAction = new FlatUI.FlatComboBox();
+            this.flatLabel9 = new FlatUI.FlatLabel();
             this.flatLabel8 = new FlatUI.FlatLabel();
             this.modeSleep = new FlatUI.FlatRadioButton();
             this.modeNormal = new FlatUI.FlatRadioButton();
@@ -43,10 +45,13 @@
             this.startTB = new System.Windows.Forms.TextBox();
             this.sleepButton = new System.Windows.Forms.Button();
             this.helpSettings = new System.Windows.Forms.Button();
+            this.noNetBG = new System.Windows.Forms.Panel();
+            this.noNetTimeTB = new System.Windows.Forms.TextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.stopTB = new System.Windows.Forms.TextBox();
             this.hideButton = new System.Windows.Forms.Button();
             this.startLabel = new FlatUI.FlatLabel();
+            this.noNetLabel = new FlatUI.FlatLabel();
             this.stopLabel = new FlatUI.FlatLabel();
             this.programsTab = new System.Windows.Forms.TabPage();
             this.helpPrograms = new System.Windows.Forms.Button();
@@ -84,11 +89,11 @@
             this.blur = new System.Windows.Forms.PictureBox();
             this.programPrompt = new System.Windows.Forms.OpenFileDialog();
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
-            this.sleepDisabled = new FlatUI.FlatLabel();
             this.skin.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.settingsTab.SuspendLayout();
             this.panel2.SuspendLayout();
+            this.noNetBG.SuspendLayout();
             this.panel1.SuspendLayout();
             this.programsTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.programsList)).BeginInit();
@@ -143,6 +148,7 @@
             this.settingsTab.Controls.Add(this.noNetToggle);
             this.settingsTab.Controls.Add(this.sleepDisabled);
             this.settingsTab.Controls.Add(this.stopAction);
+            this.settingsTab.Controls.Add(this.flatLabel9);
             this.settingsTab.Controls.Add(this.flatLabel8);
             this.settingsTab.Controls.Add(this.modeSleep);
             this.settingsTab.Controls.Add(this.modeNormal);
@@ -151,9 +157,11 @@
             this.settingsTab.Controls.Add(this.panel2);
             this.settingsTab.Controls.Add(this.sleepButton);
             this.settingsTab.Controls.Add(this.helpSettings);
+            this.settingsTab.Controls.Add(this.noNetBG);
             this.settingsTab.Controls.Add(this.panel1);
             this.settingsTab.Controls.Add(this.hideButton);
             this.settingsTab.Controls.Add(this.startLabel);
+            this.settingsTab.Controls.Add(this.noNetLabel);
             this.settingsTab.Controls.Add(this.stopLabel);
             this.settingsTab.Location = new System.Drawing.Point(4, 44);
             this.settingsTab.Name = "settingsTab";
@@ -176,6 +184,22 @@
             this.noNetToggle.TabIndex = 20;
             this.noNetToggle.Text = "flatToggle1";
             this.noNetToggle.CheckedChanged += new FlatUI.FlatToggle.CheckedChangedEventHandler(this.noNetToggle_CheckedChanged);
+            // 
+            // sleepDisabled
+            // 
+            this.sleepDisabled.AutoSize = true;
+            this.sleepDisabled.BackColor = System.Drawing.Color.Transparent;
+            this.sleepDisabled.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.sleepDisabled.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Underline);
+            this.sleepDisabled.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(121)))), ((int)(((byte)(198)))));
+            this.sleepDisabled.Location = new System.Drawing.Point(274, 16);
+            this.sleepDisabled.Name = "sleepDisabled";
+            this.sleepDisabled.Size = new System.Drawing.Size(102, 13);
+            this.sleepDisabled.TabIndex = 19;
+            this.sleepDisabled.Text = "(Bu neden kapalı?)";
+            this.sleepDisabled.Visible = false;
+            this.sleepDisabled.Click += new System.EventHandler(this.sleepDisabled_Click);
+            // 
             // stopAction
             // 
             this.stopAction.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
@@ -198,6 +222,18 @@
             this.stopAction.Size = new System.Drawing.Size(188, 24);
             this.stopAction.TabIndex = 18;
             this.stopAction.SelectedIndexChanged += new System.EventHandler(this.stopAction_SelectedIndexChanged);
+            // 
+            // flatLabel9
+            // 
+            this.flatLabel9.AutoSize = true;
+            this.flatLabel9.BackColor = System.Drawing.Color.Transparent;
+            this.flatLabel9.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.flatLabel9.ForeColor = System.Drawing.Color.White;
+            this.flatLabel9.Location = new System.Drawing.Point(27, 142);
+            this.flatLabel9.Name = "flatLabel9";
+            this.flatLabel9.Size = new System.Drawing.Size(149, 19);
+            this.flatLabel9.TabIndex = 17;
+            this.flatLabel9.Text = "İndirme bitince kapat : ";
             // 
             // flatLabel8
             // 
@@ -327,6 +363,36 @@
             this.helpSettings.UseVisualStyleBackColor = false;
             this.helpSettings.Click += new System.EventHandler(this.helpSettings_Click);
             // 
+            // noNetBG
+            // 
+            this.noNetBG.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(47)))), ((int)(((byte)(49)))));
+            this.noNetBG.Controls.Add(this.noNetTimeTB);
+            this.noNetBG.ForeColor = System.Drawing.SystemColors.Window;
+            this.noNetBG.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.noNetBG.Location = new System.Drawing.Point(399, 137);
+            this.noNetBG.Name = "noNetBG";
+            this.noNetBG.Size = new System.Drawing.Size(70, 30);
+            this.noNetBG.TabIndex = 13;
+            this.noNetBG.Visible = false;
+            // 
+            // noNetTimeTB
+            // 
+            this.noNetTimeTB.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(47)))), ((int)(((byte)(49)))));
+            this.noNetTimeTB.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.noNetTimeTB.Enabled = false;
+            this.noNetTimeTB.ForeColor = System.Drawing.Color.Silver;
+            this.noNetTimeTB.Location = new System.Drawing.Point(13, 5);
+            this.noNetTimeTB.Margin = new System.Windows.Forms.Padding(10);
+            this.noNetTimeTB.MaxLength = 5;
+            this.noNetTimeTB.Name = "noNetTimeTB";
+            this.noNetTimeTB.Size = new System.Drawing.Size(46, 18);
+            this.noNetTimeTB.TabIndex = 12;
+            this.noNetTimeTB.Text = "10";
+            this.noNetTimeTB.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.noNetTimeTB.Visible = false;
+            this.noNetTimeTB.TextChanged += new System.EventHandler(this.noNetTimeTB_TextChanged);
+            this.noNetTimeTB.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.noNetTimeTB_KeyPress);
+            // 
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(47)))), ((int)(((byte)(49)))));
@@ -381,6 +447,19 @@
             this.startLabel.Size = new System.Drawing.Size(79, 19);
             this.startLabel.TabIndex = 5;
             this.startLabel.Text = "Açılış Saati :";
+            // 
+            // noNetLabel
+            // 
+            this.noNetLabel.AutoSize = true;
+            this.noNetLabel.BackColor = System.Drawing.Color.Transparent;
+            this.noNetLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.noNetLabel.ForeColor = System.Drawing.Color.White;
+            this.noNetLabel.Location = new System.Drawing.Point(287, 142);
+            this.noNetLabel.Name = "noNetLabel";
+            this.noNetLabel.Size = new System.Drawing.Size(104, 19);
+            this.noNetLabel.TabIndex = 5;
+            this.noNetLabel.Text = "... dakika bekle :";
+            this.noNetLabel.Visible = false;
             // 
             // stopLabel
             // 
@@ -883,21 +962,6 @@
             this.notifyIcon.Visible = true;
             this.notifyIcon.Click += new System.EventHandler(this.notifyIcon_Click);
             // 
-            // sleepDisabled
-            // 
-            this.sleepDisabled.AutoSize = true;
-            this.sleepDisabled.BackColor = System.Drawing.Color.Transparent;
-            this.sleepDisabled.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.sleepDisabled.Font = new System.Drawing.Font("Segoe UI", 8F, System.Drawing.FontStyle.Underline);
-            this.sleepDisabled.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(65)))), ((int)(((byte)(121)))), ((int)(((byte)(198)))));
-            this.sleepDisabled.Location = new System.Drawing.Point(274, 41);
-            this.sleepDisabled.Name = "sleepDisabled";
-            this.sleepDisabled.Size = new System.Drawing.Size(102, 13);
-            this.sleepDisabled.TabIndex = 19;
-            this.sleepDisabled.Text = "(Bu neden kapalı?)";
-            this.sleepDisabled.Visible = false;
-            this.sleepDisabled.Click += new System.EventHandler(this.sleepDisabled_Click);
-            // 
             // Otoin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -917,6 +981,8 @@
             this.settingsTab.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panel2.PerformLayout();
+            this.noNetBG.ResumeLayout(false);
+            this.noNetBG.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.programsTab.ResumeLayout(false);
@@ -991,6 +1057,10 @@
         private System.Windows.Forms.Button sleepButton;
         private FlatUI.FlatLabel sleepDisabled;
         private FlatUI.FlatToggle noNetToggle;
+        private FlatUI.FlatLabel flatLabel9;
+        private System.Windows.Forms.Panel noNetBG;
+        private System.Windows.Forms.TextBox noNetTimeTB;
+        private FlatUI.FlatLabel noNetLabel;
     }
 }
 

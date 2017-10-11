@@ -25,7 +25,7 @@ namespace Otoin {
         bool logicalChange, stopIfNoNet, checkUpdates;
         DateTime startTime, stopTime;
         Timer service;
-        int checkCount, totalUsage, noNetActivityCount, stopActionIndex;
+        int checkCount, totalUsage, noNetActivityCount, stopActionIndex, noNetMaxMinute;
         string programFiles32, programFiles64;
         Guid scheme;
         #endregion
@@ -181,6 +181,12 @@ namespace Otoin {
             }
 
             noNetToggle.Checked = stopIfNoNet;
+            noNetTimeTB.Enabled = stopIfNoNet;
+            noNetTimeTB.Visible = stopIfNoNet;
+            noNetLabel.Visible = stopIfNoNet;
+            noNetBG.Visible = stopIfNoNet;
+            noNetTimeTB.Text = noNetMaxMinute.ToString();
+
             service = new Timer();
             service.Tick += new EventHandler(Check);
             service.Interval = 20000; // 20 saniyede bir kontrol etsin
@@ -384,7 +390,7 @@ namespace Otoin {
             this.message.Visible = true;
 
             if (writeToFile) {
-                string logLine = "[" + DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss") + "][" + kind + "]" + message + "\n\r";
+                string logLine = "[" + DateTime.Now.ToString("yyyy/MM/dd hh:mm:ss") + "][" + kind + "]" + message + "\r\n";
                 if (!File.Exists("events.log")) {
                     var f = File.Create("events.log");
                     f.Close();
@@ -406,6 +412,7 @@ namespace Otoin {
             checkUpdates = Properties.Settings.Default.updateCheck;
             sleepMode = Properties.Settings.Default.sleepMode;
             stopIfNoNet = Properties.Settings.Default.stopIfNoNet;
+            noNetMaxMinute = Properties.Settings.Default.noNetMaxMinute;
             taskEnabled = Properties.Settings.Default.taskEnabled;
             scheme = GetActiveSchemeGuid();
             wakeLockEnabled = (GetACValue(scheme, SUB_NONE, CONSOLELOCK) == 1) ? true : false;
@@ -459,6 +466,7 @@ namespace Otoin {
             Properties.Settings.Default.updateCheck = checkUpdates;
             Properties.Settings.Default.sleepMode = sleepMode;
             Properties.Settings.Default.stopIfNoNet = stopIfNoNet;
+            Properties.Settings.Default.noNetMaxMinute = noNetMaxMinute;
             Properties.Settings.Default.taskEnabled = taskEnabled;
             Properties.Settings.Default.Save();
         }
@@ -677,6 +685,10 @@ namespace Otoin {
             targetButton.BackColor = Color.FromArgb(255, 60, 60, 60);
         }
 
+        private void DisableUserInput() {
+            //TODO: disable user input after starting service
+        }
+
         private void sleepDisabled_Click(object sender, EventArgs e) {
             if (help == null) {
                 //daha önceden yardım formunu oluşturmamışız
@@ -688,11 +700,28 @@ namespace Otoin {
             help.Focus();
         }
 
+        private void noNetTimeTB_TextChanged(object sender, EventArgs e) {
+            if (noNetTimeTB.Text.Length > 0 && !int.TryParse(noNetTimeTB.Text, out noNetMaxMinute)) {
+                Log(noNetTimeTB.Text + " geçerli bir sayı değil.", "error", true);
+            }
+        }
+
         private void noNetToggle_CheckedChanged(object sender) {
-            FlatUI.FlatToggle toggle = (FlatUI.FlatToggle)sender;
+            noNetTimeTB.Enabled = noNetToggle.Checked;
+            noNetTimeTB.Visible = noNetToggle.Checked;
+            noNetLabel.Visible = noNetToggle.Checked;
+            noNetBG.Visible = noNetToggle.Checked;
+            stopIfNoNet = noNetToggle.Checked;
+        }
 
-            stopIfNoNet = toggle.Checked;  
-
+        private void noNetTimeTB_KeyPress(object sender, KeyPressEventArgs e) {
+            if (System.Text.RegularExpressions.Regex.IsMatch(e.KeyChar.ToString(), @"[^0-9^\b]") || e.KeyChar == '^') {
+                Log("Sadece sayı giriniz.", "error", false);
+                e.Handled = true;
+            }
+            else if ( message.Text == "Sadece sayı giriniz.") {
+                message.Visible = false;
+            }
         }
 
         /// <summary>
@@ -750,13 +779,17 @@ namespace Otoin {
                 if (speedKbPs < 50) {
                     noNetActivityCount++;
                     Log("İndirme yapılmadı.", "error", true);
-                    if (stopIfNoNet && noNetActivityCount * service.Interval / 1000 > 600) {
+                    if (stopIfNoNet && noNetActivityCount * service.Interval / 60000 >= noNetMaxMinute) {
+                    //if (stopIfNoNet && noNetActivityCount * service.Interval / 1000 > noNetMaxMinute * 60) {
                         //bu kısıma her service.Interval milisaniyede bir geliyoruz.
                         //service.Interval / 1000 bunu saniyeye çevirir, onu noNetActivityCount ile
                         //çarpmak kaç saniyedir indirme yapılmadığını verir
 
                         //10 dakikadır herhangi bir indirme yapılmadı, muhtemelen her şey tamamlandı.
-                        Log("10 dakikadır herhangi bir indirme yapılmadı. Kapanış eylemi uygulanıyor.", "error", true);
+                        Log(noNetMaxMinute +" dakikadır herhangi bir indirme yapılmadı. Kapanış eylemi uygulanıyor.", "error", true);
+                        for (int i = 0; i < processes.Count; i++)
+                            processes[i].Kill();
+                        
                         processes.Clear();
                         StopService();
                         DoStopAction();

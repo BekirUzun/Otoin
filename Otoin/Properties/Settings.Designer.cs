@@ -130,5 +130,17 @@ namespace Otoin.Properties {
                 this["stopIfNoNet"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int noNetMaxMinute {
+            get {
+                return ((int)(this["noNetMaxMinute"]));
+            }
+            set {
+                this["noNetMaxMinute"] = value;
+            }
+        }
     }
 }
