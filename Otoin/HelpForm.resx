@@ -117,6 +117,65 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="flatLabel8.Text" xml:space="preserve">
+    <value>Bu pencereden programın genel ayarlarını yapabilirsiniz. 
+
+
+• Uyku modu bilgisayarınızı uyku moduna alır, açılış saatinde uyandırıp seçtiğiniz programları çalıştırır.
+• Normal modda ise bilgisayarınız açık kalır, açılış saatinde seçtiğiniz programlar çalışır.
+
+
+Seçtiğiniz programların başlatılacağı saatdir. SS:DD formatında olmalıdır (S: saat, D: dakika). Varsayılan değeri 02:10'dur
+
+
+Seçtiğiniz programın kapatılacağı saatdir. SS:DD formatında olmalıdır (S: saat, D: dakika). Varsayılan değeri 07:50'dir
+
+
+İndirmeler tamamlanınca kapanış eyleminin uygulanıp uygulanmayacağını gösterir.
+
+
+Kaç dakika boyunca indirme yapılmadığında kapanış eylemi uygulanacağını belirlediğiniz yerdir. "İndirmeler tamamlanınca kapat" ayarını aktifleştirdiyseniz bu ayarı görebilirsiniz. 
+
+
+Programı sistem tepsisine küçültür. Programı tekrar görüntülemek için sistem tepsisindeki (sağ altta) Otoin sembolüne tıklamanız yeterlidir.
+
+
+Bilgisayarınızı tekrar uyandırmak üzere uyku moduna alır.
+
+
+Servisi etkinleştirir. Program belirli aralıklarla saati kontrol eder ve zamanı geldiğinde işlemleri yapar. Servisin çalışabilmesi için programı kapatmamanız gerekmektedir.
+
+
+
+
+
+</value>
+  </data>
+  <data name="flatLabel6.Text" xml:space="preserve">
+    <value>Bu pencereden başlangıç zamanı geldiğinde açılacak programları seçebilirsiniz. 
+
+
+Listedeki programlardan silmek istediklerinizi seçip klavyenizden "Delete" tuşuna basarak veya sağ tıklayıp "Sil" seçeneğine tıklayarak silebilirsiniz.
+
+
+İndirme programlarınızı (Torrent, Steam vb.) bulup listeye eklemeye çalışır. Bulma işlemi, listemizdeki programların varsayılan konumlarına bakar.
+
+
+İndirme programlarınızı el ile eklemenizi sağlar. "Otomatik Bul" butonu istediğiniz programı bulamadıysa buradan kendiniz ekleyebilirsiniz.
+
+
+
+
+
+
+
+
+
+
+
+
+</value>
+  </data>
   <data name="flatLabel12.Text" xml:space="preserve">
     <value>Uyku Modunda; bilgisayarınız uyku modundan belirlediğiniz açılış saatinden 1 dakika önce uyandırılır. Programlar belirlediğiniz saatde açılır.
 
@@ -134,59 +193,6 @@ Bu ayarı aktifleştirebilmek için  "Uyandırma zamanlayıcılarına izin ver" 
  2) Açılan pencereden en üstteki "Oturum açmayı gerekli kıl" seçeneğini "Hiçbir zaman" olarak değiştirin
 
 A ve B ayarlarını yaptıktan sonra Otoin'i yeniden başlatın.
-
-
-
-
-
-
-
-
-</value>
-  </data>
-  <data name="flatLabel8.Text" xml:space="preserve">
-    <value>Bu pencereden programın genel ayarlarını yapabilirsiniz. 
-
-
-• Uyku modu bilgisayarınızı uyku moduna alır, açılış saatinde uyandırıp seçtiğiniz programları çalıştırır.
-• Normal modda ise bilgisayarınız açık kalır, açılış saatinde seçtiğiniz programlar çalışır.
-
-
-Seçtiğiniz programların başlatılacağı saatdir. SS:DD formatında olmalıdır (S: saat, D: dakika). Varsayılan değeri 02:10'dur
-
-
-Seçtiğiniz programın kapatılacağı saatdir. SS:DD formatında olmalıdır (S: saat, D: dakika). Varsayılan değeri 07:50'dir
-
-
-Programın doğru çalışıp çalışmadığını gözlemleyebilmeniz için bir test yapar. Seçtiğiniz programlar 1 dakika sonra açılır, açıldıktan 1 dakika sonra kapatılır.
-
-
-Programı sistem tepsisine küçültür. Programı tekrar görüntülemek için sistem tepsisindeki (sağ altta) Otoin sembolüne tıklamanız yeterlidir.
-
-
-Servisi etkinleştirir. Program belirli aralıklarla saati kontrol eder ve zamanı geldiğinde işlemleri yapar. Servisin çalışabilmesi için programı kapatmamanız gerekmektedir.
-
-
-
-
-
-</value>
-  </data>
-  <data name="flatLabel6.Text" xml:space="preserve">
-    <value>Bu pencereden başlangıç zamanı geldiğinde açılacak programları seçebilirsiniz. 
-
-
-Listedeki programlardan silmek istediğinizi seçip klavyenizden "Delete" tuşuna basarak veya sağ tıklayıp "Sil" seçeneğine tıklayarak silebilirsiniz.
-
-
-İndirme programlarınızı (Torrent, Steam vb.) bulup listeye eklemeye çalışır. Bulma işlemi, listemizdeki programların varsayılan konumlarına bakar.
-
-
-İndirme programlarınızı el ile eklemenizi sağlar. "Otomatik Bul" butonu istediğiniz programı bulamadıysa buradan kendiniz ekleyebilirsiniz.
-
-
-
-
 
 
 
