@@ -118,5 +118,17 @@ namespace Otoin.Properties {
                 this["sleepMode"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool stopIfNoNet {
+            get {
+                return ((bool)(this["stopIfNoNet"]));
+            }
+            set {
+                this["stopIfNoNet"] = value;
+            }
+        }
     }
 }

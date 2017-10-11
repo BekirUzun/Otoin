@@ -32,6 +32,7 @@
             this.skin = new FlatUI.FormSkin();
             this.tabControl = new FlatUI.FlatTabControl();
             this.settingsTab = new System.Windows.Forms.TabPage();
+            this.noNetToggle = new FlatUI.FlatToggle();
             this.stopAction = new FlatUI.FlatComboBox();
             this.flatLabel8 = new FlatUI.FlatLabel();
             this.modeSleep = new FlatUI.FlatRadioButton();
@@ -139,6 +140,7 @@
             // settingsTab
             // 
             this.settingsTab.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(60)))), ((int)(((byte)(70)))), ((int)(((byte)(73)))));
+            this.settingsTab.Controls.Add(this.noNetToggle);
             this.settingsTab.Controls.Add(this.sleepDisabled);
             this.settingsTab.Controls.Add(this.stopAction);
             this.settingsTab.Controls.Add(this.flatLabel8);
@@ -160,6 +162,20 @@
             this.settingsTab.TabIndex = 0;
             this.settingsTab.Text = "Ayarlar";
             // 
+            // noNetToggle
+            // 
+            this.noNetToggle.BackColor = System.Drawing.Color.Transparent;
+            this.noNetToggle.Checked = false;
+            this.noNetToggle.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.noNetToggle.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.noNetToggle.ImeMode = System.Windows.Forms.ImeMode.Off;
+            this.noNetToggle.Location = new System.Drawing.Point(177, 137);
+            this.noNetToggle.Name = "noNetToggle";
+            this.noNetToggle.Options = FlatUI.FlatToggle._Options.Style1;
+            this.noNetToggle.Size = new System.Drawing.Size(76, 33);
+            this.noNetToggle.TabIndex = 20;
+            this.noNetToggle.Text = "flatToggle1";
+            this.noNetToggle.CheckedChanged += new FlatUI.FlatToggle.CheckedChangedEventHandler(this.noNetToggle_CheckedChanged);
             // stopAction
             // 
             this.stopAction.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(45)))), ((int)(((byte)(45)))), ((int)(((byte)(48)))));
@@ -177,7 +193,7 @@
             "Bilgisayarı hazırda beklet",
             "Bilgisayarı kapat",
             "Bilgisayarı kapatmaya zorla"});
-            this.stopAction.Location = new System.Drawing.Point(130, 128);
+            this.stopAction.Location = new System.Drawing.Point(134, 100);
             this.stopAction.Name = "stopAction";
             this.stopAction.Size = new System.Drawing.Size(188, 24);
             this.stopAction.TabIndex = 18;
@@ -189,7 +205,7 @@
             this.flatLabel8.BackColor = System.Drawing.Color.Transparent;
             this.flatLabel8.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.flatLabel8.ForeColor = System.Drawing.Color.White;
-            this.flatLabel8.Location = new System.Drawing.Point(23, 128);
+            this.flatLabel8.Location = new System.Drawing.Point(27, 100);
             this.flatLabel8.Name = "flatLabel8";
             this.flatLabel8.Size = new System.Drawing.Size(106, 19);
             this.flatLabel8.TabIndex = 17;
@@ -202,7 +218,7 @@
             this.modeSleep.Cursor = System.Windows.Forms.Cursors.Default;
             this.modeSleep.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.modeSleep.ForeColor = System.Drawing.Color.White;
-            this.modeSleep.Location = new System.Drawing.Point(215, 37);
+            this.modeSleep.Location = new System.Drawing.Point(215, 12);
             this.modeSleep.Name = "modeSleep";
             this.modeSleep.Options = FlatUI.FlatRadioButton._Options.Style1;
             this.modeSleep.Size = new System.Drawing.Size(65, 22);
@@ -216,7 +232,7 @@
             this.modeNormal.Checked = true;
             this.modeNormal.Cursor = System.Windows.Forms.Cursors.Hand;
             this.modeNormal.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.modeNormal.Location = new System.Drawing.Point(130, 37);
+            this.modeNormal.Location = new System.Drawing.Point(130, 12);
             this.modeNormal.Name = "modeNormal";
             this.modeNormal.Options = FlatUI.FlatRadioButton._Options.Style1;
             this.modeNormal.Size = new System.Drawing.Size(79, 22);
@@ -229,7 +245,7 @@
             this.flatLabel7.BackColor = System.Drawing.Color.Transparent;
             this.flatLabel7.Font = new System.Drawing.Font("Segoe UI", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(162)));
             this.flatLabel7.ForeColor = System.Drawing.Color.White;
-            this.flatLabel7.Location = new System.Drawing.Point(24, 37);
+            this.flatLabel7.Location = new System.Drawing.Point(24, 12);
             this.flatLabel7.Name = "flatLabel7";
             this.flatLabel7.Size = new System.Drawing.Size(99, 17);
             this.flatLabel7.TabIndex = 14;
@@ -258,7 +274,7 @@
             this.panel2.Controls.Add(this.startTB);
             this.panel2.ForeColor = System.Drawing.SystemColors.Window;
             this.panel2.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.panel2.Location = new System.Drawing.Point(130, 74);
+            this.panel2.Location = new System.Drawing.Point(134, 50);
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(70, 30);
             this.panel2.TabIndex = 13;
@@ -317,7 +333,7 @@
             this.panel1.Controls.Add(this.stopTB);
             this.panel1.ForeColor = System.Drawing.SystemColors.Window;
             this.panel1.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.panel1.Location = new System.Drawing.Point(382, 74);
+            this.panel1.Location = new System.Drawing.Point(386, 50);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(70, 30);
             this.panel1.TabIndex = 13;
@@ -360,7 +376,7 @@
             this.startLabel.BackColor = System.Drawing.Color.Transparent;
             this.startLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.startLabel.ForeColor = System.Drawing.Color.White;
-            this.startLabel.Location = new System.Drawing.Point(23, 79);
+            this.startLabel.Location = new System.Drawing.Point(27, 55);
             this.startLabel.Name = "startLabel";
             this.startLabel.Size = new System.Drawing.Size(79, 19);
             this.startLabel.TabIndex = 5;
@@ -372,7 +388,7 @@
             this.stopLabel.BackColor = System.Drawing.Color.Transparent;
             this.stopLabel.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.stopLabel.ForeColor = System.Drawing.Color.White;
-            this.stopLabel.Location = new System.Drawing.Point(280, 79);
+            this.stopLabel.Location = new System.Drawing.Point(284, 55);
             this.stopLabel.Name = "stopLabel";
             this.stopLabel.Size = new System.Drawing.Size(96, 19);
             this.stopLabel.TabIndex = 5;
@@ -974,6 +990,7 @@
         private System.Windows.Forms.ToolStripMenuItem silToolStripMenuItem;
         private System.Windows.Forms.Button sleepButton;
         private FlatUI.FlatLabel sleepDisabled;
+        private FlatUI.FlatToggle noNetToggle;
     }
 }
 

@@ -20,9 +20,9 @@ namespace Otoin {
         List<string> programPaths;
         List<Process> processes;
         List<PerformanceCounter> networksPC;
-        bool isFirstRun, isProcStarted, isServiceStarted;
-        bool isHourChanged, isManualDelete, sleepMode, taskEnabled, wakeLockEnabled, rtcWakeEnabled;
-        bool logicalChange, allowSleep, checkUpdates;
+        bool isFirstRun, isProcStarted, isServiceStarted, isHourChanged, isManualDelete;
+        bool allowSleep, sleepMode, taskEnabled, wakeLockEnabled, rtcWakeEnabled;
+        bool logicalChange, stopIfNoNet, checkUpdates;
         DateTime startTime, stopTime;
         Timer service;
         int checkCount, totalUsage, noNetActivityCount, stopActionIndex;
@@ -160,12 +160,12 @@ namespace Otoin {
             bool rtcWakeAC = (GetACValue(scheme, SUB_SLEEP, RTCWAKE) == 1) ? true : false;
             bool rtcWakeDC = (GetDCValue(scheme, SUB_SLEEP, RTCWAKE) == 1) ? true : false;
 
-            if(consoleLockAC || consoleLockDC || !rtcWakeAC) {
+            if (consoleLockAC || consoleLockDC || !rtcWakeAC) {
                 allowSleep = false;
                 modeSleep.Enabled = false;
                 modeSleep.Font = new Font("Segoe UI", 10F, FontStyle.Strikeout);
                 sleepDisabled.Visible = true;
-            } 
+            }
             else {
                 allowSleep = true;
             }
@@ -173,12 +173,14 @@ namespace Otoin {
             if (sleepMode && allowSleep) {
                 logicalChange = true;
                 modeSleep.Checked = true;
-            } else {
+            }
+            else {
                 //uyandırma görevi Durdur butonuna basılınca siliniyor ama ne olur ne olmaz
                 // kimsenin bilgisayarını gece gereksiz uyandırmadığımızdan emin olalım :)
                 DeleteTask();
             }
 
+            noNetToggle.Checked = stopIfNoNet;
             service = new Timer();
             service.Tick += new EventHandler(Check);
             service.Interval = 20000; // 20 saniyede bir kontrol etsin
@@ -403,6 +405,7 @@ namespace Otoin {
             stopActionIndex = Properties.Settings.Default.stopAction;
             checkUpdates = Properties.Settings.Default.updateCheck;
             sleepMode = Properties.Settings.Default.sleepMode;
+            stopIfNoNet = Properties.Settings.Default.stopIfNoNet;
             taskEnabled = Properties.Settings.Default.taskEnabled;
             scheme = GetActiveSchemeGuid();
             wakeLockEnabled = (GetACValue(scheme, SUB_NONE, CONSOLELOCK) == 1) ? true : false;
@@ -455,6 +458,7 @@ namespace Otoin {
             Properties.Settings.Default.stopAction = stopActionIndex;
             Properties.Settings.Default.updateCheck = checkUpdates;
             Properties.Settings.Default.sleepMode = sleepMode;
+            Properties.Settings.Default.stopIfNoNet = stopIfNoNet;
             Properties.Settings.Default.taskEnabled = taskEnabled;
             Properties.Settings.Default.Save();
         }
@@ -684,6 +688,13 @@ namespace Otoin {
             help.Focus();
         }
 
+        private void noNetToggle_CheckedChanged(object sender) {
+            FlatUI.FlatToggle toggle = (FlatUI.FlatToggle)sender;
+
+            stopIfNoNet = toggle.Checked;  
+
+        }
+
         /// <summary>
         /// Girilen açılış ve kapanış saatlerini kontrol eder. Zamanı geldiğinde ilgili işlemleri uygular.
         /// 'service.Interval' saniyede bir çalışır.
@@ -739,7 +750,7 @@ namespace Otoin {
                 if (speedKbPs < 50) {
                     noNetActivityCount++;
                     Log("İndirme yapılmadı.", "error", true);
-                    if (noNetActivityCount * service.Interval / 1000 > 600) {
+                    if (stopIfNoNet && noNetActivityCount * service.Interval / 1000 > 600) {
                         //bu kısıma her service.Interval milisaniyede bir geliyoruz.
                         //service.Interval / 1000 bunu saniyeye çevirir, onu noNetActivityCount ile
                         //çarpmak kaç saniyedir indirme yapılmadığını verir
