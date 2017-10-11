@@ -9,7 +9,7 @@ Otoin ise indirme programlarınızı gece 02:10'da açar sabah 07:50'de kapatır
 
 ## Özellikler
 - Programların açılış kapanış saatini değiştirme
-- Bilgisayarı uyku moduna belirlediğiniz satde uyandırma
+- Bilgisayarı uyku moduna alıp belirlediğiniz saatde uyandırma
 - Bazı indirme programlarını otomatik keşfetme ([Desteklenen Programlar][desteklenen])
 - İstediğiniz programı ekleyebilme
 - Arkaplanda çalışma
