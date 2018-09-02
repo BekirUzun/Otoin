@@ -117,15 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="aboutText.Text" xml:space="preserve">
-    <value>Otoin, 1 Mayıs'da çıkan AKK yasasından en iyi şekilde yararlanmanızı sağlar. Bu yasada gece 02:00 ile 08:00 arasında yaptığınız internet kullanımı AKK'ye sayılmaz ve AKK sonrası yavaşlamadan etkilenmez. Otoin ise indirme programlarınızı gece 02:05'de açar sabah 07:55'de kapatır.
-
-
-• Açılacak programlar kısmına indirme programlarınızı (Torrent, Steam vb.) ekleyin.
-• Dilerseniz ayarlar kısmından açılış kapanış saatini düzenleyin.
-• Ayarlar kısmından "Başlat" butonuna basıp servisi aktifleştirin.
-</value>
-  </data>
   <metadata name="programNameCol.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
@@ -135,6 +126,15 @@
   <metadata name="rightClickMenu.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>262, 17</value>
   </metadata>
+  <data name="aboutText.Text" xml:space="preserve">
+    <value>Otoin, 1 Mayıs'da çıkan AKK yasasından en iyi şekilde yararlanmanızı sağlar. Bu yasada gece 02:00 ile 08:00 arasında yaptığınız internet kullanımı AKK'ye sayılmaz ve AKK sonrası yavaşlamadan etkilenmez. Otoin ise indirme programlarınızı gece 02:05'de açar sabah 07:55'de kapatır.
+
+
+• Açılacak programlar kısmına indirme programlarınızı (Torrent, Steam vb.) ekleyin.
+• Dilerseniz ayarlar kısmından açılış kapanış saatini düzenleyin.
+• Ayarlar kısmından "Başlat" butonuna basıp servisi aktifleştirin.
+</value>
+  </data>
   <metadata name="programPrompt.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>

@@ -90,6 +90,8 @@ namespace Otoin {
         #endregion
 
         public Otoin() {
+            System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11;
+
             RetrieveSettings(); //programı yeni başlatıyoruz, ayarları dosyadan alalım
             InitializeComponent();
 
