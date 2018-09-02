@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Imaging;
 using System.Diagnostics;
 using System.IO;
 using System.Windows.Forms;
-using System.Threading.Tasks;
 using Octokit;
 using Microsoft.Win32.TaskScheduler;
 using System.Runtime.InteropServices;
@@ -16,7 +14,6 @@ namespace Otoin {
     public partial class Otoin : Form {
 
         #region Fields
-        HelpForm help;
         List<string> programPaths;
         List<Process> processes;
         List<PerformanceCounter> networksPC;
@@ -344,13 +341,7 @@ namespace Otoin {
         }
 
         private void helpSettings_Click(object sender, EventArgs e) {
-            if (help == null) {
-                help = new HelpForm();
-                help.Show();
-            }
-            help.SelectTab(0);
-            help.Show();
-            help.Focus();
+            Process.Start("https://github.com/BekirUzun/Otoin/blob/master/HELP.md#ayarlar");
         }
 
         /// <summary>
@@ -363,14 +354,7 @@ namespace Otoin {
         }
 
         private void helpPrograms_Click(object sender, EventArgs e) {
-            if (help == null) {
-                //daha önceden yardım formunu oluşturmamışız
-                help = new HelpForm();
-                help.Show();
-            }
-            help.SelectTab(1);
-            help.Show();
-            help.Focus();
+            Process.Start("https://github.com/BekirUzun/Otoin/blob/master/HELP.md#a%C3%A7%C4%B1lacak-programlar");
         }
 
         /// <summary>
@@ -690,14 +674,7 @@ namespace Otoin {
         }
 
         private void sleepDisabled_Click(object sender, EventArgs e) {
-            if (help == null) {
-                //daha önceden yardım formunu oluşturmamışız
-                help = new HelpForm();
-                help.Show();
-            }
-            help.SelectTab(2);
-            help.Show();
-            help.Focus();
+            Process.Start("https://github.com/BekirUzun/Otoin/blob/master/HELP.md#uyku-modu");
         }
 
         private void noNetTimeTB_TextChanged(object sender, EventArgs e) {
@@ -734,12 +711,11 @@ namespace Otoin {
             if (!isProcStarted) {
                 if (DateTime.Now.Hour == startTime.Hour && DateTime.Now.Minute == startTime.Minute) {
                     try {
+                        isProcStarted = true;
                         for (int i = 0; i < programPaths.Count; i++) {
                             processes.Add(Process.Start(programPaths[i]));
                         }
-
                         Log(checkCount + ". kontrolde " + processes.Count + " program başlatıldı!", "success", true);
-                        isProcStarted = true;
                         checkCount = 0;
                     }
                     catch (Exception ex) {
@@ -751,6 +727,9 @@ namespace Otoin {
                 }
             }
             else {
+                int speedKbPs = GetNetworkUsage() / 1024;
+                totalUsage += speedKbPs * service.Interval / 1000;
+
                 if (DateTime.Now.Hour == stopTime.Hour && DateTime.Now.Minute == stopTime.Minute) {
                     try {
                         int i;
@@ -770,11 +749,8 @@ namespace Otoin {
 
                 }
                 else {
-                    Log(checkCount + ". kontrol yapıldı", "info", false);
+                    Log(checkCount + ". kontrol yapıldı. Hız: " + speedKbPs + " kbps, Toplam: " + totalUsage/1024 + " mb", "info", false);
                 }
-
-                int speedKbPs = GetNetworkUsage() / 1024;
-                totalUsage += speedKbPs * service.Interval / 1000;
 
                 if (speedKbPs < 50) {
                     noNetActivityCount++;
@@ -822,22 +798,33 @@ namespace Otoin {
                 return;
             }
             var github = new GitHubClient(new ProductHeaderValue("Otoin"));
-            var releases = await github.Repository.Release.GetAll("BekirUzun", "Otoin");
-            string tagName = releases[0].TagName;
-            int latestVersion = Int16.Parse((string.Concat(tagName.Where(char.IsDigit))).Substring(0,3));
-            var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
-            int currentVersion = v.Major * 100 + v.Minor * 10 + v.Build;
-            if (latestVersion > currentVersion) {
-                blur.Image = Properties.Resources.blur;
-                blur.BackColor = Color.Transparent;
-                blur.BringToFront();
-                blur.Invalidate();
-                blur.Visible = true;
+            
+            try
+            {
+                var releases = await github.Repository.Release.GetAll("BekirUzun", "Otoin");
+                string tagName = releases[0].TagName;
+                int latestVersion = Int16.Parse((string.Concat(tagName.Where(char.IsDigit))).Substring(0, 3));
+                var v = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+                int currentVersion = v.Major * 100 + v.Minor * 10 + v.Build;
+                if (latestVersion > currentVersion)
+                {
+                    blur.Image = Properties.Resources.blur;
+                    blur.BackColor = Color.Transparent;
+                    blur.BringToFront();
+                    blur.Invalidate();
+                    blur.Visible = true;
 
-                UpdateForm update = new UpdateForm(blur);
-                update.Show();
-                update.Focus();
+                    UpdateForm update = new UpdateForm(blur);
+                    update.Show();
+                    update.Focus();
+                }
             }
+            catch (Exception e)
+            {
+                Log("Güncelleme kontrol edilirken bir hata meydana geldi :(", "error", true);
+                return;
+            }
+            
         }
 
         /// <summary>
