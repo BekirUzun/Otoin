@@ -21,7 +21,7 @@ Otoin ise indirme programlarınızı gece 02:10'da açar sabah 07:50'de kapatır
 ###### Not: Uygulama imzalanmadığından Windows Defender uyarısı çıkmaktadır. En kısa zamanda çözülecektir.
 
 ### Son sürüm
-**v1.4.3** [İndirmek için tıklayın][indirme-linki]
+**v1.4.4** [İndirmek için tıklayın][indirme-linki]
 
 ### Önceki sürümler
 Önceki sürümler için ["Releases"][onceki-surumler] kısmına göz atabilirsiniz.
@@ -29,6 +29,6 @@ Otoin ise indirme programlarınızı gece 02:10'da açar sabah 07:50'de kapatır
  [ss-settings]: https://raw.githubusercontent.com/BekirUzun/Otoin/master/otoin-settings.png "Otoin Ekran Görüntüsü"
  
  [desteklenen]: https://github.com/BekirUzun/Otoin/blob/master/programlar.md "Otomatik keşfetme özelliğinin desteklediği programlar"
- [indirme-linki]: https://github.com/BekirUzun/Otoin/releases/download/v1.4.3/Otoin-v1.4.3.zip "Otoin-v1.4.3"
+ [indirme-linki]: https://github.com/BekirUzun/Otoin/releases/download/v1.4.4/Otoin-v1.4.4.zip "Otoin-v1.4.4"
  [onceki-surumler]: https://github.com/BekirUzun/Otoin/releases "Önceki sürümler için tıklayın"
  
