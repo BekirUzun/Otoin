@@ -188,7 +188,7 @@ namespace Otoin {
 
             service = new Timer();
             service.Tick += new EventHandler(Check);
-            service.Interval = 20000; // 20 saniyede bir kontrol etsin
+            service.Interval = 5000; // 20 saniyede bir kontrol etsin
 
             processes = new List<Process>();
             isManualDelete = true; // kullanıcının el ile sildiği programlar için
@@ -736,7 +736,16 @@ namespace Otoin {
                     try {
                         int i;
                         for (i = 0; i < processes.Count; i++) {
-                            processes[i].Kill();
+                            if (!processes[i].HasExited)
+                                processes[i].Kill();
+                            else
+                            {
+                                var name = programPaths[i].Split('\\').Last();
+                                foreach (var process in Process.GetProcessesByName(name))
+                                {
+                                    process.Kill();
+                                }
+                            }
                         }
                         processes.Clear();
                         StopService();
@@ -756,8 +765,9 @@ namespace Otoin {
 
                 if (speedKbPs < 50) {
                     noNetActivityCount++;
-                    Log("İndirme yapılmadı.", "error", true);
-                    if (stopIfNoNet && noNetActivityCount * service.Interval / 60000 >= noNetMaxMinute) {
+                    float noNetMinutes = (float)noNetActivityCount * (float)service.Interval / 60000;
+                    Log(noNetMinutes.ToString("0.00") +" dakikadır indirme yapılmadı.", "error", true);
+                    if (stopIfNoNet && noNetMinutes >= noNetMaxMinute) {
                     //if (stopIfNoNet && noNetActivityCount * service.Interval / 1000 > noNetMaxMinute * 60) {
                         //bu kısıma her service.Interval milisaniyede bir geliyoruz.
                         //service.Interval / 1000 bunu saniyeye çevirir, onu noNetActivityCount ile
@@ -766,7 +776,18 @@ namespace Otoin {
                         //10 dakikadır herhangi bir indirme yapılmadı, muhtemelen her şey tamamlandı.
                         Log(noNetMaxMinute +" dakikadır herhangi bir indirme yapılmadı. Kapanış eylemi uygulanıyor.", "error", true);
                         for (int i = 0; i < processes.Count; i++)
-                            processes[i].Kill();
+                        {
+                            if (!processes[i].HasExited)
+                                processes[i].Kill();
+                            else
+                            {
+                                var name = programPaths[i].Split('\\').Last().Replace(".exe", "");
+                                foreach (var process in Process.GetProcessesByName(name))
+                                {
+                                    process.Kill();
+                                }
+                            }
+                        }
                         
                         processes.Clear();
                         StopService();
